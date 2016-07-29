@@ -1,6 +1,6 @@
 package ua.kiev.allexb.carrental;
 
-import ua.kiev.allexb.carrental.model.entity.Car;
+import ua.kiev.allexb.carrental.model.Car;
 
 import java.math.BigDecimal;
 

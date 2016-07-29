@@ -1,4 +1,4 @@
-package ua.kiev.allexb.carrental.model.entity;
+package ua.kiev.allexb.carrental.model;
 
 import java.math.BigDecimal;
 
@@ -7,14 +7,14 @@ import java.math.BigDecimal;
  */
 public class Car {
 
-    private int id;
+    private long id;
     private String model;
     private Colour colour;
     private String description;
     private int yearOfManufacture;
     private BigDecimal rentalPrice;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -64,12 +64,12 @@ public class Car {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = (int) (id ^ (id >>> 32));
         result = 31 * result + model.hashCode();
         result = 31 * result + (colour != null ? colour.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + yearOfManufacture;
-        result = 31 * result + (rentalPrice != null ? rentalPrice.hashCode() : 0);
+        result = 31 * result + rentalPrice.hashCode();
         return result;
     }
 
