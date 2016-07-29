@@ -10,13 +10,15 @@ import java.math.BigDecimal;
 public class Main {
     public static void main(String[] args) {
         Car car = new Car();
-        car.setCarId(1);
-        car.setCarModel("Ferrari");
-        car.setCarColour(Car.CarColour.BLACK);
+        car.setId(1);
+        car.setModel("Ferrari");
+        car.setColour(Car.Colour.BLACK);
         car.setYearOfManufacture(2012);
         car.setRentalPrice(new BigDecimal(2000d));
         car.setDescription("Very fast car!");
 
         System.out.println(car);
+
+
     }
 }

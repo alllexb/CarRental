@@ -7,35 +7,35 @@ import java.math.BigDecimal;
  */
 public class Car {
 
-    private int carId;
-    private String carModel;
-    private CarColour carColour;
+    private int id;
+    private String model;
+    private Colour colour;
     private String description;
     private int yearOfManufacture;
     private BigDecimal rentalPrice;
 
-    public int getCarId() {
-        return carId;
+    public int getId() {
+        return id;
     }
 
-    public void setCarId(int carId) {
-        this.carId = carId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getCarModel() {
-        return carModel;
+    public String getModel() {
+        return model;
     }
 
-    public void setCarModel(String carModel) {
-        this.carModel = carModel;
+    public void setModel(String model) {
+        this.model = model;
     }
 
-    public CarColour getCarColour() {
-        return carColour;
+    public Colour getColour() {
+        return colour;
     }
 
-    public void setCarColour(CarColour carColour) {
-        this.carColour = carColour;
+    public void setColour(Colour colour) {
+        this.colour = colour;
     }
 
     public String getDescription() {
@@ -64,9 +64,9 @@ public class Car {
 
     @Override
     public int hashCode() {
-        int result = carId;
-        result = 31 * result + carModel.hashCode();
-        result = 31 * result + (carColour != null ? carColour.hashCode() : 0);
+        int result = id;
+        result = 31 * result + model.hashCode();
+        result = 31 * result + (colour != null ? colour.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + yearOfManufacture;
         result = 31 * result + (rentalPrice != null ? rentalPrice.hashCode() : 0);
@@ -76,14 +76,14 @@ public class Car {
     @Override
     public String toString() {
         return "Car{" +
-                "carId=" + carId +
-                ", carModel='" + carModel + '\'' +
-                ", carColour=" + carColour +
+                "id=" + id +
+                ", model='" + model + '\'' +
+                ", colour=" + colour +
                 ", description='" + description + '\'' +
                 ", yearOfManufacture=" + yearOfManufacture +
                 ", rentalPrice=" + rentalPrice +
                 '}';
     }
 
-    public enum CarColour {WHITE, BLACK, RED, YELLOW, BLUE};
+    public enum Colour {WHITE, BLACK, RED, YELLOW, BLUE};
 }
