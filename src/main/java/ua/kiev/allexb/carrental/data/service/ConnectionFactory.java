@@ -65,8 +65,12 @@ public class ConnectionFactory {
     }
 
     public static Connection getConnection() {
-        if (dbConnection == null)
-            dbConnection = instance.createConnection();
+        try {
+            if (dbConnection == null || dbConnection.isClosed())
+                dbConnection = instance.createConnection();
+        } catch (SQLException e) {
+            System.out.println("ERROR: Unable to Connect to Database.");
+        }
         return dbConnection;
     }
 }

@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,34 +18,31 @@ import java.util.List;
  */
 public class CarDAOImpl implements CarDAO {
 
+    private static final int ONE = 1;
+    private static final int ALL = Integer.MAX_VALUE;
+
     private Connection connection;
     private Statement statement;
 
-    public CarDomain getByModel(String model) {
-        return null;
-    }
-
-    public List<CarDomain> getAll() {
-        return null;
-    }
-
-    public CarDomain getById(Long id) {
-        String query = "SELECT * FROM car_tb WHERE id=" + id;
+    private List<CarDomain> getItems(String query, int amount) {
         ResultSet resultSet = null;
-        CarDomain car = null;
+        List<CarDomain> cars = new ArrayList<CarDomain>();
         try {
             connection = ConnectionFactory.getConnection();
             try {
                 statement = connection.createStatement();
                 resultSet = statement.executeQuery(query);
-                if (resultSet.first()) {
-                    car = new CarDomain(resultSet.getLong("id"),
-                            resultSet.getString("model"),
-                            Car.Colour.valueOf(resultSet.getString("color")),
-                            resultSet.getString("description"),
-                            resultSet.getInt("year_of_manufacture"),
-                            resultSet.getBigDecimal("rental_price"),
-                            resultSet.getBoolean("rented"));
+                if (resultSet!= null) {
+                    for(int i = 0; i < amount & resultSet.next(); i++) {
+                        CarDomain car = new CarDomain(resultSet.getLong("id"),
+                                resultSet.getString("model"),
+                                Car.Colour.valueOf(resultSet.getString("color")),
+                                resultSet.getString("description"),
+                                resultSet.getInt("year_of_manufacture"),
+                                resultSet.getBigDecimal("rental_price"),
+                                resultSet.getBoolean("rented"));
+                        cars.add(car);
+                    }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -54,7 +52,24 @@ public class CarDAOImpl implements CarDAO {
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
-        return car;
+        return cars;
+    }
+
+    public CarDomain getByModel(String model) {
+        String query = "SELECT * FROM car_tb WHERE model= '" + model+"'";
+        List<CarDomain> cars = getItems(query,ONE);
+        return cars.isEmpty() ? null : cars.get(0);
+    }
+
+    public List<CarDomain> getAll() {
+        String query = "SELECT * FROM car_tb";
+        return getItems(query, ALL);
+    }
+
+    public CarDomain getById(Long id) {
+        String query = "SELECT * FROM car_tb WHERE id=" + id;
+        List<CarDomain> cars = getItems(query,ONE);
+        return cars.isEmpty() ? null : cars.get(0);
     }
 
     public void add(CarDomain car) {
