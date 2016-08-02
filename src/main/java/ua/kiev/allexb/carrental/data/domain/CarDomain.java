@@ -5,7 +5,8 @@ import ua.kiev.allexb.carrental.model.Car;
 import java.math.BigDecimal;
 
 /**
- * Created by bas on 29.07.2016.
+ * @author allexb
+ * @version 1.0 29.07.2016
  */
 public class CarDomain extends AbstractDomain {
 
@@ -14,6 +15,17 @@ public class CarDomain extends AbstractDomain {
     private String description;
     private int yearOfManufacture;
     private BigDecimal rentalPrice;
+    private boolean rented;
+
+    public CarDomain(Long id, String model, Car.Colour colour, String description, int yearOfManufacture, BigDecimal rentalPrice, boolean rented) {
+        super(id);
+        this.model = model;
+        this.colour = colour;
+        this.description = description;
+        this.yearOfManufacture = yearOfManufacture;
+        this.rentalPrice = rentalPrice;
+        this.rented = rented;
+    }
 
     public String getModel() {
         return model;
@@ -53,5 +65,13 @@ public class CarDomain extends AbstractDomain {
 
     public void setRentalPrice(BigDecimal rentalPrice) {
         this.rentalPrice = rentalPrice;
+    }
+
+    public boolean isRented() {
+        return rented;
+    }
+
+    public void setRented(boolean rented) {
+        this.rented = rented;
     }
 }

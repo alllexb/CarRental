@@ -1,9 +1,12 @@
 package ua.kiev.allexb.carrental.model;
 
+import ua.kiev.allexb.carrental.data.domain.CarDomain;
+
 import java.math.BigDecimal;
 
 /**
- * Created by bas on 29.07.16.
+ * @author allexb
+ * @version 1.0 29.07.2016
  */
 public class Car {
 
@@ -13,6 +16,20 @@ public class Car {
     private String description;
     private int yearOfManufacture;
     private BigDecimal rentalPrice;
+    private boolean  rented;
+
+    public Car() {
+    }
+
+    public Car(CarDomain car) {
+        id = car.getId();
+        model = car.getModel();
+        colour = car.getColour();
+        description = car.getDescription();
+        yearOfManufacture = car.getYearOfManufacture();
+        rentalPrice = car.getRentalPrice();
+        rented = car.isRented();
+    }
 
     public long getId() {
         return id;
@@ -62,6 +79,14 @@ public class Car {
         this.rentalPrice = rentalPrice;
     }
 
+    public boolean isRented() {
+        return rented;
+    }
+
+    public void setRented(boolean rented) {
+        this.rented = rented;
+    }
+
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
@@ -69,7 +94,8 @@ public class Car {
         result = 31 * result + (colour != null ? colour.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + yearOfManufacture;
-        result = 31 * result + rentalPrice.hashCode();
+        result = 31 * result + (rentalPrice != null ? rentalPrice.hashCode() : 0);
+        result = 31 * result + (rented ? 1 : 0);
         return result;
     }
 
@@ -82,6 +108,7 @@ public class Car {
                 ", description='" + description + '\'' +
                 ", yearOfManufacture=" + yearOfManufacture +
                 ", rentalPrice=" + rentalPrice +
+                ", rented=" + rented +
                 '}';
     }
 

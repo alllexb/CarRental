@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * @author allexb
- * @version 1.0 14.12.2015
+ * @version 1.0 29.07.2016
  */
 
 public abstract class AbstractDomain implements Serializable {

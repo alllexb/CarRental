@@ -1,11 +1,14 @@
 package ua.kiev.allexb.carrental;
 
+import ua.kiev.allexb.carrental.data.dao.CarDAOImpl;
+import ua.kiev.allexb.carrental.data.service.ConnectionFactory;
 import ua.kiev.allexb.carrental.model.Car;
 
 import java.math.BigDecimal;
 
 /**
- * Created by bas on 29.07.2016.
+ * @author allexb
+ * @version 1.0 29.07.2016
  */
 public class Main {
     public static void main(String[] args) {
@@ -16,9 +19,14 @@ public class Main {
         car.setYearOfManufacture(2012);
         car.setRentalPrice(new BigDecimal(2000d));
         car.setDescription("Very fast car!");
+        car.setRented(true);
 
         System.out.println(car);
 
+        CarDAOImpl carDAO = new CarDAOImpl();
+        Car carFromDB = new Car(carDAO.getById(2L));
+
+        System.out.println(carFromDB);
 
     }
 }
