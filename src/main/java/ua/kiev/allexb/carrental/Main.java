@@ -29,18 +29,18 @@ public class Main {
         System.out.println(car);
 
         CarDAOImpl carDAO = new CarDAOImpl();
-        Car carFromDB = new Car(carDAO.getById(2L));
+        Car carFromDB = carDAO.getById(2L).getCar();
 
         List<Car> cars = new ArrayList<Car>();
         for(CarDomain domain: carDAO.getAll()) {
-            cars.add(new Car(domain));
+            cars.add(domain.getCar());
         }
 
         System.out.println(carFromDB);
         System.out.println("----");
         System.out.println(Arrays.toString(cars.toArray()));
 
-        carFromDB = new Car(carDAO.getByModel("Ferrari"));
+        carFromDB = carDAO.getByModel("Ferrari").getCar();
 
         System.out.println(carFromDB);
     }

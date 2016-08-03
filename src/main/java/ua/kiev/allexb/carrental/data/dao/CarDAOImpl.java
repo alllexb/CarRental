@@ -56,7 +56,7 @@ public class CarDAOImpl implements CarDAO {
     }
 
     public CarDomain getByModel(String model) {
-        String query = "SELECT * FROM car_tb WHERE model= '" + model+"'";
+        String query = "SELECT * FROM car_tb WHERE model='" + model + "'";
         List<CarDomain> cars = getItems(query,ONE);
         return cars.isEmpty() ? null : cars.get(0);
     }

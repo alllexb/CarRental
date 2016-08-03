@@ -1,7 +1,5 @@
 package ua.kiev.allexb.carrental.model;
 
-import ua.kiev.allexb.carrental.data.domain.CarDomain;
-
 import java.math.BigDecimal;
 
 /**
@@ -21,21 +19,21 @@ public class Car {
     public Car() {
     }
 
-    public Car(CarDomain car) {
-        id = car.getId();
-        model = car.getModel();
-        colour = car.getColour();
-        description = car.getDescription();
-        yearOfManufacture = car.getYearOfManufacture();
-        rentalPrice = car.getRentalPrice();
-        rented = car.isRented();
+    public Car(long id, String model, Colour colour, String description, int yearOfManufacture, BigDecimal rentalPrice, boolean rented) {
+        this.id = id;
+        this.model = model;
+        this.colour = colour;
+        this.description = description;
+        this.yearOfManufacture = yearOfManufacture;
+        this.rentalPrice = rentalPrice;
+        this.rented = rented;
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -27,6 +27,18 @@ public class CarDomain extends AbstractDomain {
         this.rented = rented;
     }
 
+    public Car getCar() {
+        Car car = new Car();
+        car.setId(this.getId());
+        car.setModel(this.model);
+        car.setColour(this.colour);
+        car.setDescription(this.description);
+        car.setYearOfManufacture(this.yearOfManufacture);
+        car.setRentalPrice(this.rentalPrice);
+        car.setRented(this.rented);
+        return car;
+    }
+
     public String getModel() {
         return model;
     }
