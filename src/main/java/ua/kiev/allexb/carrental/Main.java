@@ -1,14 +1,17 @@
 package ua.kiev.allexb.carrental;
 
+import ua.kiev.allexb.carrental.data.dao.CarDAO;
 import ua.kiev.allexb.carrental.data.dao.CarDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.ClientDAO;
+import ua.kiev.allexb.carrental.data.dao.ClientDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.util.DateUtil;
 import ua.kiev.allexb.carrental.data.domain.CarDomain;
-import ua.kiev.allexb.carrental.data.service.ConnectionFactory;
+import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.model.Car;
+import ua.kiev.allexb.carrental.model.Client;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +32,7 @@ public class Main {
 
         System.out.println(car);
 
-        CarDAOImpl carDAO = new CarDAOImpl();
+        CarDAO carDAO = new CarDAOImpl();
         CarDomain dom;
         Car carFromDB = ((dom = carDAO.getById(2L)) == null) ? null : dom.getCar();
 
@@ -62,7 +65,54 @@ public class Main {
         updateCar.setRentalPrice(new BigDecimal(700D));
         carDAO.update(new CarDomain(updateCar));
 
+        System.out.println("--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!--");
 
+        ClientDAO clientDAO = new ClientDAOImpl();
+        List<Client> clientsByFullName = clientDAO.getByFullName("Jone", "Dou").stream().map(ClientDomain::getClient).collect(Collectors.toList());
+        System.out.println(Arrays.toString(clientsByFullName.toArray()));
 
+        List<Client> clients = clientDAO.getAll().stream().map(ClientDomain::getClient).collect(Collectors.toList());
+        System.out.println(Arrays.toString(clients.toArray()));
+
+        ClientDomain clientDom;
+        Client clientFromDB = ((clientDom = clientDAO.getById(4L)) == null) ? null : clientDom.getClient();
+        System.out.println(clientFromDB);
+
+        Client addedClient = new Client();
+        addedClient.setFirstName("Alex");
+        addedClient.setLastName("Brown");
+        addedClient.setBirthday(DateUtil.getSimpleFormatDate("1985-05-12"));
+        addedClient.setdLNumber(89534712);
+        addedClient.setLengthOfDrivingExperience(12);
+        clientDAO.add(new ClientDomain(addedClient));
+
+        System.out.println("--= ADD =--");
+        clients = clientDAO.getAll().stream().map(ClientDomain::getClient).collect(Collectors.toList());
+        System.out.println(Arrays.toString(clients.toArray()));
+
+        Client updateClient = addedClient;
+        updateClient.setId(6L);
+        updateClient.setBirthday(DateUtil.getSimpleFormatDate("1988-06-04"));
+        updateClient.setLastName("Irvin");
+        updateClient.setdLNumber(59874563);
+
+        clientDAO.update(new ClientDomain(updateClient));
+
+        System.out.println("--= UPDATE =--");
+        clients = clientDAO.getAll().stream().map(ClientDomain::getClient).collect(Collectors.toList());
+        System.out.println(Arrays.toString(clients.toArray()));
+
+        Client removeClient = new Client();
+        removeClient.setId(10L);
+        removeClient.setFirstName("Alex");
+        removeClient.setLastName("Brown");
+        removeClient.setBirthday(DateUtil.getSimpleFormatDate("1985-05-12"));
+        removeClient.setdLNumber(89534712);
+        removeClient.setLengthOfDrivingExperience(12);
+        clientDAO.remove(new ClientDomain(removeClient));
+
+        System.out.println("--= REMOVE =--");
+        clients = clientDAO.getAll().stream().map(ClientDomain::getClient).collect(Collectors.toList());
+        System.out.println(Arrays.toString(clients.toArray()));
     }
 }
