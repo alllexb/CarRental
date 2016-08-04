@@ -72,15 +72,47 @@ public class CarDAOImpl implements CarDAO {
         return cars.isEmpty() ? null : cars.get(0);
     }
 
-    public void add(CarDomain car) {
+    private void dataChangeQuery(String query) {
+        try {
+            connection = ConnectionFactory.getConnection();
+            try {
+                statement = connection.createStatement();
+                statement.executeUpdate(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } finally {
+            DbUtil.close(statement);
+            DbUtil.close(connection);
+        }
+    }
 
+    public void add(CarDomain car) {
+        String query = "INSERT INTO car_tb VALUES (" +
+                "LAST_INSERT_ID(), '" + car.getModel() + "', '" + car.getColour() + "', '" + car.getDescription() +
+                "', " + car.getYearOfManufacture() + ", " + car.getRentalPrice() + ", " + car.isRented() + ")";
+        this.dataChangeQuery(query);
     }
 
     public void update(CarDomain car) {
-
+        String query = "UPDATE car_tb SET " +
+                "model='" + car.getModel() + "', " +
+                "color='" + car.getColour() + "', " +
+                "description='" + car.getDescription() + "', " +
+                "year_of_manufacture=" + car.getYearOfManufacture() + ", " +
+                "rental_price=" + car.getRentalPrice() + ", " +
+                "rented=" + car.isRented() + " WHERE id=" + car.getId();
+        this.dataChangeQuery(query);
     }
 
     public void remove(CarDomain car) {
-
+        String query = "DELETE FROM car_tb WHERE id=" + car.getId() + " AND " +
+                "model='" + car.getModel() + "' AND " +
+                "color='" + car.getColour() + "' AND " +
+                "description='" + car.getDescription() + "' AND " +
+                "year_of_manufacture=" + car.getYearOfManufacture() + " AND " +
+                "rental_price=" + car.getRentalPrice() + " AND " +
+                "rented=" + car.isRented();
+        this.dataChangeQuery(query);
     }
 }
