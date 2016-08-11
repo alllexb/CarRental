@@ -1,5 +1,6 @@
 package ua.kiev.allexb.carrental.data.dao;
 
+import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.util.DateUtil;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.data.service.ConnectionFactory;
@@ -18,6 +19,8 @@ import java.util.List;
  */
 public class ClientDAOImpl implements ClientDAO {
 
+    static final Logger logger = Logger.getLogger(ClientDAO.class);
+
     private static final int ONE = 1;
     private static final int ALL = Integer.MAX_VALUE;
 
@@ -28,8 +31,9 @@ public class ClientDAOImpl implements ClientDAO {
         ResultSet resultSet = null;
         List<ClientDomain> clients = new ArrayList<>();
         try {
-            connection = ConnectionFactory.getConnection();
+
             try {
+                connection = ConnectionFactory.getInstance().getConnection();
                 statement = connection.createStatement();
                 resultSet = statement.executeQuery(query);
                 if (resultSet!= null) {
@@ -51,6 +55,7 @@ public class ClientDAOImpl implements ClientDAO {
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
+        logger.info("Get data query occurred.");
         return clients;
     }
     @Override
@@ -76,8 +81,8 @@ public class ClientDAOImpl implements ClientDAO {
 
     private void dataChangeQuery(String query) {
         try {
-            connection = ConnectionFactory.getConnection();
             try {
+                connection = ConnectionFactory.getInstance().getConnection();
                 statement = connection.createStatement();
                 statement.executeUpdate(query);
             } catch (SQLException e) {
@@ -87,12 +92,13 @@ public class ClientDAOImpl implements ClientDAO {
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
+        logger.info("Add or change data query occurred.");
     }
 
     @Override
     public void add(ClientDomain client) {
-        String query = "INSERT INTO client_tb VALUES (" +
-                "LAST_INSERT_ID(), '" + client.getFirstName() + "', '" + client.getLastName() + "', '" +
+        String query = "INSERT INTO client_tb(first_name, last_name, birthday, dl_number, length_of_driving_experience) " +
+                "VALUES ('" + client.getFirstName() + "', '" + client.getLastName() + "', '" +
                 DateUtil.getSQLFormatDate(client.getBirthday()) + "', " + client.getdLNumber() + ", " +
                 client.getLengthOfDrivingExperience() + ")";
         this.dataChangeQuery(query);

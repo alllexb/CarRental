@@ -1,5 +1,7 @@
 package ua.kiev.allexb.carrental;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import ua.kiev.allexb.carrental.data.dao.*;
 import ua.kiev.allexb.carrental.data.dao.util.DateUtil;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
@@ -20,6 +22,17 @@ import java.util.stream.Collectors;
  * @version 1.0 29.07.2016
  */
 public class Main {
+
+    public static final String LOGGER_GONFIGFILE_PATH = "src\\main\\resources\\log4j.properties";
+    static final Logger logger = Logger.getLogger(Main.class);
+
+    static {
+        System.setProperty("app.root", System.getProperty("user.dir") + "\\src\\main");
+        PropertyConfigurator.configure(LOGGER_GONFIGFILE_PATH);
+        logger.info("   ---==   START LOGGER SESSION   ==---");
+        logger.info("Logger configured.");
+    }
+
     public static void main(String[] args) {
         Car car = new Car();
         car.setId(1);

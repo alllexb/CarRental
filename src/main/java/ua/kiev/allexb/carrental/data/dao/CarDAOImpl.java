@@ -1,5 +1,6 @@
 package ua.kiev.allexb.carrental.data.dao;
 
+import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.domain.CarDomain;
 import ua.kiev.allexb.carrental.data.service.ConnectionFactory;
 import ua.kiev.allexb.carrental.data.service.DbUtil;
@@ -18,6 +19,8 @@ import java.util.List;
  */
 public class CarDAOImpl implements CarDAO {
 
+    static final Logger logger = Logger.getLogger(CarDAO.class);
+
     private static final int ONE = 1;
     private static final int ALL = Integer.MAX_VALUE;
 
@@ -26,10 +29,10 @@ public class CarDAOImpl implements CarDAO {
 
     private List<CarDomain> getItems(String query, int amount) {
         ResultSet resultSet = null;
-        List<CarDomain> cars = new ArrayList<CarDomain>();
+        List<CarDomain> cars = new ArrayList<>();
         try {
-            connection = ConnectionFactory.getConnection();
             try {
+                connection = ConnectionFactory.getInstance().getConnection();
                 statement = connection.createStatement();
                 resultSet = statement.executeQuery(query);
                 if (resultSet!= null) {
@@ -52,6 +55,7 @@ public class CarDAOImpl implements CarDAO {
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
+        logger.info("Get data query occurred.");
         return cars;
     }
 
@@ -74,8 +78,8 @@ public class CarDAOImpl implements CarDAO {
 
     private void dataChangeQuery(String query) {
         try {
-            connection = ConnectionFactory.getConnection();
             try {
+                connection = ConnectionFactory.getInstance().getConnection();
                 statement = connection.createStatement();
                 statement.executeUpdate(query);
             } catch (SQLException e) {
@@ -85,11 +89,12 @@ public class CarDAOImpl implements CarDAO {
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
+        logger.info("Add or change data query occurred.");
     }
 
     public void add(CarDomain car) {
-        String query = "INSERT INTO car_tb VALUES (" +
-                "LAST_INSERT_ID(), '" + car.getModel() + "', '" + car.getColour() + "', '" + car.getDescription() +
+        String query = "INSERT INTO car_tb(model, color, description, year_of_manufacture, rental_price, rented)" +
+                " VALUES ('" + car.getModel() + "', '" + car.getColour() + "', '" + car.getDescription() +
                 "', " + car.getYearOfManufacture() + ", " + car.getRentalPrice() + ", " + car.isRented() + ")";
         this.dataChangeQuery(query);
     }

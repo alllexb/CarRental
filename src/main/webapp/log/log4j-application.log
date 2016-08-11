@@ -1,0 +1,27 @@
+2016-08-10 18:51:19 INFO  Main:32 -    ---==   START LOGGER SESSION   ==---
+2016-08-10 18:51:19 INFO  Main:33 - Logger configured.
+2016-08-10 18:51:19 INFO  ConnectionFactory:31 - Connection Factory Property loaded.
+		Property file location: ..\src\main\resources\db.properties
+2016-08-10 18:51:19 INFO  CarDAO:58 - Get data query occurred.
+2016-08-10 18:51:19 INFO  CarDAO:58 - Get data query occurred.
+2016-08-10 18:51:20 INFO  CarDAO:58 - Get data query occurred.
+2016-08-10 18:51:20 INFO  CarDAO:58 - Get data query occurred.
+2016-08-10 18:51:20 INFO  CarDAO:92 - Add or change data query occurred.
+2016-08-10 18:51:20 INFO  CarDAO:92 - Add or change data query occurred.
+2016-08-10 18:51:20 INFO  ClientDAO:58 - Get data query occurred.
+2016-08-10 18:51:20 INFO  ClientDAO:58 - Get data query occurred.
+2016-08-10 18:51:20 INFO  ClientDAO:58 - Get data query occurred.
+2016-08-10 18:51:20 INFO  ClientDAO:95 - Add or change data query occurred.
+2016-08-10 18:51:20 INFO  ClientDAO:58 - Get data query occurred.
+2016-08-10 18:51:20 INFO  ClientDAO:95 - Add or change data query occurred.
+2016-08-10 18:51:20 INFO  ClientDAO:58 - Get data query occurred.
+2016-08-10 18:51:20 INFO  ClientDAO:95 - Add or change data query occurred.
+2016-08-10 18:51:20 INFO  ClientDAO:58 - Get data query occurred.
+2016-08-10 18:51:20 INFO  AdministratorDAO:57 - Get data query occurred.
+2016-08-10 18:51:20 INFO  AdministratorDAO:57 - Get data query occurred.
+2016-08-10 18:51:20 INFO  AdministratorDAO:57 - Get data query occurred.
+2016-08-10 18:51:20 INFO  AdministratorDAO:107 - Add or change data query occurred.
+2016-08-10 18:51:20 INFO  AdministratorDAO:57 - Get data query occurred.
+2016-08-10 18:51:20 INFO  AdministratorDAO:57 - Get data query occurred.
+2016-08-10 18:51:20 INFO  AdministratorDAO:57 - Get data query occurred.
+2016-08-10 18:51:20 INFO  AdministratorDAO:57 - Get data query occurred.

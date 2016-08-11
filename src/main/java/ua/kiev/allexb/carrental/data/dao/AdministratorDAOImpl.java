@@ -1,5 +1,6 @@
 package ua.kiev.allexb.carrental.data.dao;
 
+import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.data.service.ConnectionFactory;
@@ -18,6 +19,8 @@ import java.util.List;
  */
 public class AdministratorDAOImpl implements AdministratorDAO {
 
+    static final Logger logger = Logger.getLogger(AdministratorDAO.class);
+
     private static final int ONE = 1;
     private static final int ALL = Integer.MAX_VALUE;
 
@@ -28,8 +31,8 @@ public class AdministratorDAOImpl implements AdministratorDAO {
         ResultSet resultSet = null;
         List<AdministratorDomain> clients = new ArrayList<>();
         try {
-            connection = ConnectionFactory.getConnection();
             try {
+                connection = ConnectionFactory.getInstance().getConnection();
                 statement = connection.createStatement();
                 resultSet = statement.executeQuery(query);
                 if (resultSet!= null) {
@@ -51,6 +54,7 @@ public class AdministratorDAOImpl implements AdministratorDAO {
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
+        logger.info("Get data query occurred.");
         return clients;
     }
 
@@ -89,8 +93,8 @@ public class AdministratorDAOImpl implements AdministratorDAO {
 
     private void dataChangeQuery(String query) {
         try {
-            connection = ConnectionFactory.getConnection();
             try {
+                connection = ConnectionFactory.getInstance().getConnection();
                 statement = connection.createStatement();
                 statement.executeUpdate(query);
             } catch (SQLException e) {
@@ -100,6 +104,7 @@ public class AdministratorDAOImpl implements AdministratorDAO {
             DbUtil.close(statement);
             DbUtil.close(connection);
         }
+        logger.info("Add or change data query occurred.");
     }
     @Override
     public void add(AdministratorDomain administrator) {
