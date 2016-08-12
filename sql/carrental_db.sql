@@ -34,7 +34,8 @@ CREATE TABLE `administrator_tb` (`id` BIGINT(10) NOT NULL AUTO_INCREMENT,
 
 INSERT INTO car_tb(model, color, description, year_of_manufacture, rental_price, rented) VALUES
 ('Ferrari', 'RED', 'Fast car!', 2015, 1500, 1),
-('Ford', 'BLACK', 'Slow car!', 2010, 200, 1);
+('Ford', 'BLACK', 'Slow car!', 2010, 200, 1),
+('GMC', 'GREEN', 'Very big car!', 2009, 700, 0);
 
 INSERT INTO client_tb(first_name, last_name, birthday, dl_number, length_of_driving_experience) VALUES
 ('Jone', 'Dou', '1988-03-01', 12358758, 6),

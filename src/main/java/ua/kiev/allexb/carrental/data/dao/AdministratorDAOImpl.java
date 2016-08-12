@@ -5,6 +5,7 @@ import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.data.service.ConnectionFactory;
 import ua.kiev.allexb.carrental.data.service.DbUtil;
+import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 public class AdministratorDAOImpl implements AdministratorDAO {
 
-    static final Logger logger = Logger.getLogger(AdministratorDAO.class);
+    static final Logger logger = ApplicationLogger.getLogger(AdministratorDAO.class);
 
     private static final int ONE = 1;
     private static final int ALL = Integer.MAX_VALUE;

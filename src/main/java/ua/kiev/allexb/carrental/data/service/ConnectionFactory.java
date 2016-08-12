@@ -1,15 +1,14 @@
 package ua.kiev.allexb.carrental.data.service;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.Logger;
+import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 /**
  * @author allexb
@@ -17,10 +16,10 @@ import org.apache.log4j.Logger;
  */
 public class ConnectionFactory {
 
-    static final Logger logger = Logger.getLogger(ConnectionFactory.class);
+    static final Logger logger = ApplicationLogger.getLogger(ConnectionFactory.class);
 
     // database properties file path
-    private static final String PATH_TO_PROPERTIES = System.getProperty("user.dir") + "\\src\\main\\resources\\db.properties";
+    private static final String PATH_TO_PROPERTIES = getPathToProperties("db.properties");
     private static final Properties properties;
     static {
         InputStream inputStream;
@@ -37,6 +36,21 @@ public class ConnectionFactory {
             e.printStackTrace();
         }
         properties = prop;
+    }
+
+    private static String getPathToProperties(String fileName) {
+        String path =  ConnectionFactory.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        String fullPath = "";
+        try {
+            fullPath = URLDecoder.decode(path, "UTF-8");
+            String[] pathArr = fullPath.split("/WEB-INF/classes/");
+            fullPath = pathArr[0];
+        } catch (UnsupportedEncodingException ex) {
+            logger.warn("Property file path encoding exception.");
+        } catch (NullPointerException ex) {
+            logger.warn("\"/WEB-INF/classes/\" directory not found.");
+        }
+        return new File(fullPath).getPath() + "\\WEB-INF\\classes\\" + fileName;
     }
 
     private static ConnectionFactory instance = new ConnectionFactory();

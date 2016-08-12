@@ -70,7 +70,7 @@
     </dependencies>
 
     <build>
-        <finalName>Car Rental Service</finalName>
+        <finalName>CarRentalService</finalName>
 
         <plugins>
             <plugin>

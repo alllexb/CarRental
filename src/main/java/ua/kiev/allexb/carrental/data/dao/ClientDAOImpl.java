@@ -5,6 +5,7 @@ import ua.kiev.allexb.carrental.data.dao.util.DateUtil;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.data.service.ConnectionFactory;
 import ua.kiev.allexb.carrental.data.service.DbUtil;
+import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 public class ClientDAOImpl implements ClientDAO {
 
-    static final Logger logger = Logger.getLogger(ClientDAO.class);
+    static final Logger logger = ApplicationLogger.getLogger(ClientDAO.class);
 
     private static final int ONE = 1;
     private static final int ALL = Integer.MAX_VALUE;

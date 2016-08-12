@@ -37,7 +37,7 @@ public class Main {
         Car car = new Car();
         car.setId(1);
         car.setModel("Ferrari");
-        car.setColour(Car.Colour.BLACK);
+        car.setColor(Car.Color.BLACK);
         car.setYearOfManufacture(2012);
         car.setRentalPrice(new BigDecimal(2000d));
         car.setDescription("Very fast car!");
@@ -65,7 +65,7 @@ public class Main {
 
         Car addedCar = new Car();
         addedCar.setModel("Citroen C-Elysee");
-        addedCar.setColour(Car.Colour.BLACK);
+        addedCar.setColor(Car.Color.BLACK);
         addedCar.setYearOfManufacture(2012);
         addedCar.setRentalPrice(new BigDecimal(500d));
         addedCar.setDescription("Comfortable car for you!");

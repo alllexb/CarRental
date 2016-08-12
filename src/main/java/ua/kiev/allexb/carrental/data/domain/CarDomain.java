@@ -11,16 +11,16 @@ import java.math.BigDecimal;
 public class CarDomain extends AbstractDomain {
 
     private String model;
-    private Car.Colour colour;
+    private Car.Color color;
     private String description;
     private int yearOfManufacture;
     private BigDecimal rentalPrice;
     private boolean rented;
 
-    public CarDomain(Long id, String model, Car.Colour colour, String description, int yearOfManufacture, BigDecimal rentalPrice, boolean rented) {
+    public CarDomain(Long id, String model, Car.Color color, String description, int yearOfManufacture, BigDecimal rentalPrice, boolean rented) {
         super(id);
         this.model = model;
-        this.colour = colour;
+        this.color = color;
         this.description = description;
         this.yearOfManufacture = yearOfManufacture;
         this.rentalPrice = rentalPrice;
@@ -35,14 +35,14 @@ public class CarDomain extends AbstractDomain {
     }
 
     public Car getCar() {
-        return new Car(this.getId(), this.model, this.colour, this.description, this.yearOfManufacture,
+        return new Car(this.getId(), this.model, this.color, this.description, this.yearOfManufacture,
                 this.rentalPrice, this.rented);
     }
 
     public void setCar(Car car) {
         super.setId(car.getId());
         this.model = car.getModel();
-        this.colour = car.getColour();
+        this.color = car.getColor();
         this.description = car.getDescription();
         this.yearOfManufacture = car.getYearOfManufacture();
         this.rentalPrice = car.getRentalPrice();
@@ -57,12 +57,12 @@ public class CarDomain extends AbstractDomain {
         this.model = model;
     }
 
-    public Car.Colour getColour() {
-        return colour;
+    public Car.Color getColor() {
+        return color;
     }
 
-    public void setColour(Car.Colour colour) {
-        this.colour = colour;
+    public void setColor(Car.Color color) {
+        this.color = color;
     }
 
     public String getDescription() {

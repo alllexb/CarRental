@@ -5,6 +5,7 @@ import ua.kiev.allexb.carrental.data.domain.CarDomain;
 import ua.kiev.allexb.carrental.data.service.ConnectionFactory;
 import ua.kiev.allexb.carrental.data.service.DbUtil;
 import ua.kiev.allexb.carrental.model.Car;
+import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 public class CarDAOImpl implements CarDAO {
 
-    static final Logger logger = Logger.getLogger(CarDAO.class);
+    static final Logger logger = ApplicationLogger.getLogger(CarDAO.class);
 
     private static final int ONE = 1;
     private static final int ALL = Integer.MAX_VALUE;
@@ -39,7 +40,7 @@ public class CarDAOImpl implements CarDAO {
                     for(int i = 0; i < amount & resultSet.next(); i++) {
                         CarDomain car = new CarDomain(resultSet.getLong("id"),
                                 resultSet.getString("model"),
-                                Car.Colour.valueOf(resultSet.getString("color")),
+                                Car.Color.valueOf(resultSet.getString("color")),
                                 resultSet.getString("description"),
                                 resultSet.getInt("year_of_manufacture"),
                                 resultSet.getBigDecimal("rental_price"),
@@ -94,7 +95,7 @@ public class CarDAOImpl implements CarDAO {
 
     public void add(CarDomain car) {
         String query = "INSERT INTO car_tb(model, color, description, year_of_manufacture, rental_price, rented)" +
-                " VALUES ('" + car.getModel() + "', '" + car.getColour() + "', '" + car.getDescription() +
+                " VALUES ('" + car.getModel() + "', '" + car.getColor() + "', '" + car.getDescription() +
                 "', " + car.getYearOfManufacture() + ", " + car.getRentalPrice() + ", " + car.isRented() + ")";
         this.dataChangeQuery(query);
     }
@@ -102,7 +103,7 @@ public class CarDAOImpl implements CarDAO {
     public void update(CarDomain car) {
         String query = "UPDATE car_tb SET " +
                 "model='" + car.getModel() + "', " +
-                "color='" + car.getColour() + "', " +
+                "color='" + car.getColor() + "', " +
                 "description='" + car.getDescription() + "', " +
                 "year_of_manufacture=" + car.getYearOfManufacture() + ", " +
                 "rental_price=" + car.getRentalPrice() + ", " +
@@ -113,7 +114,7 @@ public class CarDAOImpl implements CarDAO {
     public void remove(CarDomain car) {
         String query = "DELETE FROM car_tb WHERE id=" + car.getId() + " AND " +
                 "model='" + car.getModel() + "' AND " +
-                "color='" + car.getColour() + "' AND " +
+                "color='" + car.getColor() + "' AND " +
                 "description='" + car.getDescription() + "' AND " +
                 "year_of_manufacture=" + car.getYearOfManufacture() + " AND " +
                 "rental_price=" + car.getRentalPrice() + " AND " +

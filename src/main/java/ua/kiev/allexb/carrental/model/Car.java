@@ -10,7 +10,7 @@ public class Car {
 
     private long id;
     private String model;
-    private Colour colour;
+    private Color color;
     private String description;
     private int yearOfManufacture;
     private BigDecimal rentalPrice;
@@ -19,10 +19,10 @@ public class Car {
     public Car() {
     }
 
-    public Car(long id, String model, Colour colour, String description, int yearOfManufacture, BigDecimal rentalPrice, boolean rented) {
+    public Car(long id, String model, Color color, String description, int yearOfManufacture, BigDecimal rentalPrice, boolean rented) {
         this.id = id;
         this.model = model;
-        this.colour = colour;
+        this.color = color;
         this.description = description;
         this.yearOfManufacture = yearOfManufacture;
         this.rentalPrice = rentalPrice;
@@ -45,12 +45,12 @@ public class Car {
         this.model = model;
     }
 
-    public Colour getColour() {
-        return colour;
+    public Color getColor() {
+        return color;
     }
 
-    public void setColour(Colour colour) {
-        this.colour = colour;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public String getDescription() {
@@ -89,7 +89,7 @@ public class Car {
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + model.hashCode();
-        result = 31 * result + (colour != null ? colour.hashCode() : 0);
+        result = 31 * result + (color != null ? color.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + yearOfManufacture;
         result = 31 * result + (rentalPrice != null ? rentalPrice.hashCode() : 0);
@@ -102,7 +102,7 @@ public class Car {
         return "Car{" +
                 "id=" + id +
                 ", model='" + model + '\'' +
-                ", colour=" + colour +
+                ", color=" + color +
                 ", description='" + description + '\'' +
                 ", yearOfManufacture=" + yearOfManufacture +
                 ", rentalPrice=" + rentalPrice +
@@ -110,5 +110,5 @@ public class Car {
                 '}';
     }
 
-    public enum Colour {WHITE, BLACK, RED, YELLOW, BLUE};
+    public enum Color {WHITE, BLACK, RED, YELLOW, GREEN, BLUE}
 }
