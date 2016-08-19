@@ -3,6 +3,7 @@ package ua.kiev.allexb.carrental.data.dao;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -11,10 +12,12 @@ import java.util.List;
  */
 public interface AdministratorDAO extends AbstractDAO<AdministratorDomain>{
 
-    List<AdministratorDomain> getByFullName(String firsName, String lastName);
+    List<AdministratorDomain> getByFullName(String firsName, String lastName) throws SQLException;
 
-    List<ClientDomain> getAllClients();
+    List<ClientDomain> getAllClients() throws SQLException;
 
-    AdministratorDomain getByLoginAndPassword(String login, String password);
+    AdministratorDomain getByLoginAndPassword(String login, String password) throws SQLException;
+
+    AdministratorDomain getByLogin(String login) throws SQLException;
 
 }

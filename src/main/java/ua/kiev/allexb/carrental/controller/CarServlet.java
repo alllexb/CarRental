@@ -1,9 +1,12 @@
 package ua.kiev.allexb.carrental.controller;
 
+import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.CarDAO;
 import ua.kiev.allexb.carrental.data.dao.CarDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.CarDomain;
 import ua.kiev.allexb.carrental.model.Car;
+import ua.kiev.allexb.carrental.utils.ApplicationLogger;
+import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,6 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +27,7 @@ import java.util.stream.Collectors;
 @WebServlet(urlPatterns = {"/cars"})
 public class CarServlet extends HttpServlet {
     private static final long serialVersionUID = -5098121881329935823L;
+    static final Logger logger = ApplicationLogger.getLogger(CarServlet.class);
 
     public CarServlet() {
         super();
@@ -29,8 +35,17 @@ public class CarServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        CarDAO carDAO = new CarDAOImpl();
-        List<Car> cars = carDAO.getAll().stream().map(CarDomain::getCar).collect(Collectors.toList());
+        logger.info("Extracting of cars list from database.");
+        List<Car> cars = null;
+        Connection connection = StoreAndCookieUtil.getStoredConnection(request);
+        try {
+            CarDAO carDAO = new CarDAOImpl(connection);
+            cars = carDAO.getAll().stream().map(CarDomain::getCar).collect(Collectors.toList());
+            logger.info("Cars list extracted.");
+        } catch (SQLException ex) {
+            logger.warn("Data base exception.", ex);
+            request.setAttribute("errorString", ex.getMessage());
+        }
         request.setAttribute("cars_list", cars);
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/carsView.jsp");
         dispatcher.forward(request, response);

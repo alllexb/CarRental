@@ -2,6 +2,7 @@ package ua.kiev.allexb.carrental.data.dao;
 
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -10,5 +11,5 @@ import java.util.List;
  */
 public interface ClientDAO extends AbstractDAO<ClientDomain> {
 
-    List<ClientDomain> getByFullName(String firsName, String lastName);
+    List<ClientDomain> getByFullName(String firsName, String lastName) throws SQLException;
 }

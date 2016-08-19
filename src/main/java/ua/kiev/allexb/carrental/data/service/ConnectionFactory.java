@@ -46,9 +46,9 @@ public class ConnectionFactory {
             String[] pathArr = fullPath.split("/WEB-INF/classes/");
             fullPath = pathArr[0];
         } catch (UnsupportedEncodingException ex) {
-            logger.warn("Property file path encoding exception.");
+            logger.warn("Property file path encoding exception.", ex);
         } catch (NullPointerException ex) {
-            logger.warn("\"/WEB-INF/classes/\" directory not found.");
+            logger.warn("\"/WEB-INF/classes/\" directory not found.", ex);
         }
         return new File(fullPath).getPath() + "\\WEB-INF\\classes\\" + fileName;
     }

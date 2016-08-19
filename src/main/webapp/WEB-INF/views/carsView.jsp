@@ -11,8 +11,9 @@
 
 <jsp:include page="_header.jsp"></jsp:include>
 <jsp:include page="_menu.jsp"></jsp:include>
-
 <h3>Cars List</h3>
+<c:if test="${errorString != null}"><p class="error">${errorString}</p></c:if>
+
 <table cellpadding="0" class="print_table">
   <thead>
   <tr>

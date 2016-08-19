@@ -13,22 +13,24 @@ import java.io.IOException;
 
 /**
  * @author allexb
- * @version 1.0 11.08.2016
+ * @version 1.0 13.08.2016
  */
-@WebServlet(urlPatterns = {"/home", "", "/index.html", "/index.htm", "/index.jsp"})
-public class HomeServlet extends HttpServlet {
-    private static final long serialVersionUID = 2688609755631823746L;
+@WebServlet(urlPatterns = {"/login"})
+public class LoginServlet extends HttpServlet {
+    private static final long serialVersionUID = 7410978571600567753L;
 
-    static final Logger logger = ApplicationLogger.getLogger(HomeServlet.class);
+    static final Logger logger = ApplicationLogger.getLogger(LoginServlet.class);
 
-    public HomeServlet() {
+    public LoginServlet() {
         super();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("Request to page: " + request.getServletPath());
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/homeView.jsp");
+        // Forward to /WEB-INF/views/loginView.jsp
+        // (Users can not access directly into JSP pages placed in WEB-INF)
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/loginView.jsp");
         dispatcher.forward(request, response);
     }
 

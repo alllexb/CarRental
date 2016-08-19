@@ -7,12 +7,14 @@ import ua.kiev.allexb.carrental.data.dao.util.DateUtil;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.data.domain.CarDomain;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
+import ua.kiev.allexb.carrental.data.service.ConnectionFactory;
 import ua.kiev.allexb.carrental.model.Administrator;
 import ua.kiev.allexb.carrental.model.Car;
 import ua.kiev.allexb.carrental.model.Client;
 import ua.kiev.allexb.carrental.model.helpers.PasswordHelper;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +27,7 @@ public class Main {
 
     public static final String LOGGER_GONFIGFILE_PATH = "src\\main\\resources\\log4j.properties";
     static final Logger logger = Logger.getLogger(Main.class);
+    private static final ConnectionFactory factory = ConnectionFactory.getInstance();
 
     static {
         System.setProperty("app.root", System.getProperty("user.dir") + "\\src\\main");
@@ -33,7 +36,7 @@ public class Main {
         logger.info("Logger configured.");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         Car car = new Car();
         car.setId(1);
         car.setModel("Ferrari");
@@ -136,7 +139,12 @@ public class Main {
         admin.setLogin("admin-ab");
         admin.setPassword(PasswordHelper.getSecurePassword("ab!12admin"));
         System.out.println("--= GET by Full Name =--");
-        AdministratorDAO administratorDAO = new AdministratorDAOImpl();
+        AdministratorDAO administratorDAO = null;
+        try {
+            administratorDAO = new AdministratorDAOImpl(factory.getConnection());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         List<Administrator> adminsByFullName =  administratorDAO.getByFullName("Bill","Jones").stream().map(AdministratorDomain::getAdministrator).collect(Collectors.toList());
         System.out.println(Arrays.toString(adminsByFullName.toArray()));
         System.out.println("--= GET admin by login and password =--");

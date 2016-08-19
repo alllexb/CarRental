@@ -2,6 +2,7 @@ package ua.kiev.allexb.carrental.data.dao;
 
 import ua.kiev.allexb.carrental.data.domain.AbstractDomain;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -10,14 +11,17 @@ import java.util.List;
  */
 public interface AbstractDAO<T extends AbstractDomain> {
 
-    List<T> getAll();
+    int ONE = 1;
+    int ALL = Integer.MAX_VALUE;
 
-    T getById(Long id);
+    List<T> getAll() throws SQLException;
 
-    void add(T model);
+    T getById(Long id) throws SQLException;
 
-    void update(T model);
+    void add(T model) throws SQLException;
 
-    void remove(T model);
+    void update(T model) throws SQLException;
+
+    void remove(T model) throws SQLException;
 }
 

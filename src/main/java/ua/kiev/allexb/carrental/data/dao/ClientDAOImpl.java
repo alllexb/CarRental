@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.util.DateUtil;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.data.service.ConnectionFactory;
-import ua.kiev.allexb.carrental.data.service.DbUtil;
+import ua.kiev.allexb.carrental.data.service.DataBaseUtil;
 import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 import java.sql.Connection;
@@ -22,82 +22,84 @@ public class ClientDAOImpl implements ClientDAO {
 
     static final Logger logger = ApplicationLogger.getLogger(ClientDAO.class);
 
-    private static final int ONE = 1;
-    private static final int ALL = Integer.MAX_VALUE;
-
     private Connection connection;
     private Statement statement;
 
-    private List<ClientDomain> getItems(String query, int amount) {
+    public ClientDAOImpl() {
+    }
+
+    public ClientDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+
+    private List<ClientDomain> getItems(String query, int amount) throws SQLException {
         ResultSet resultSet = null;
         List<ClientDomain> clients = new ArrayList<>();
         try {
-
-            try {
-                connection = ConnectionFactory.getInstance().getConnection();
-                statement = connection.createStatement();
-                resultSet = statement.executeQuery(query);
-                if (resultSet!= null) {
-                    for(int i = 0; i < amount & resultSet.next(); i++) {
-                        ClientDomain client = new ClientDomain(resultSet.getLong("id"),
-                                resultSet.getString("first_name"),
-                                resultSet.getString("last_name"),
-                                resultSet.getDate("birthday"),
-                                resultSet.getInt("dl_number"),
-                                resultSet.getInt("length_of_driving_experience"));
-                       clients.add(client);
-                    }
+            if (connection == null) throw new SQLException("No connection to database.");
+            connection = ConnectionFactory.getInstance().getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            if (resultSet != null) {
+                for (int i = 0; i < amount & resultSet.next(); i++) {
+                    ClientDomain client = new ClientDomain(resultSet.getLong("id"),
+                            resultSet.getString("first_name"),
+                            resultSet.getString("last_name"),
+                            resultSet.getDate("birthday"),
+                            resultSet.getInt("dl_number"),
+                            resultSet.getInt("length_of_driving_experience"));
+                    clients.add(client);
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
         } finally {
-            DbUtil.close(resultSet);
-            DbUtil.close(statement);
-            DbUtil.close(connection);
+            DataBaseUtil.closeResultSet(resultSet);
+            DataBaseUtil.closeStatement(statement);
+            DataBaseUtil.closeConnection(connection);
         }
         logger.info("Get data query occurred.");
         return clients;
     }
+
     @Override
-    public List<ClientDomain> getByFullName(String firsName, String lastName) {
+    public List<ClientDomain> getByFullName(String firsName, String lastName) throws SQLException {
         String query = "SELECT * FROM client_tb WHERE first_name='" + firsName + "' AND last_name='" + lastName + "'";
         List<ClientDomain> clients = this.getItems(query, ALL);
         return clients;
     }
 
     @Override
-    public List<ClientDomain> getAll() {
+    public List<ClientDomain> getAll() throws SQLException {
         String query = "SELECT * FROM client_tb";
         List<ClientDomain> clients = this.getItems(query, ALL);
         return clients;
     }
 
     @Override
-    public ClientDomain getById(Long id) {
+    public ClientDomain getById(Long id) throws SQLException {
         String query = "SELECT * FROM client_tb WHERE id=" + id;
-        List<ClientDomain> clients = getItems(query,ONE);
+        List<ClientDomain> clients = getItems(query, ONE);
         return clients.isEmpty() ? null : clients.get(0);
     }
 
-    private void dataChangeQuery(String query) {
+    private void dataChangeQuery(String query) throws SQLException {
         try {
-            try {
-                connection = ConnectionFactory.getInstance().getConnection();
-                statement = connection.createStatement();
-                statement.executeUpdate(query);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            if (connection == null) throw new SQLException("No connection to database.");
+            connection = ConnectionFactory.getInstance().getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
         } finally {
-            DbUtil.close(statement);
-            DbUtil.close(connection);
+            DataBaseUtil.closeStatement(statement);
+            DataBaseUtil.closeConnection(connection);
         }
         logger.info("Add or change data query occurred.");
     }
 
     @Override
-    public void add(ClientDomain client) {
+    public void add(ClientDomain client) throws SQLException {
         String query = "INSERT INTO client_tb(first_name, last_name, birthday, dl_number, length_of_driving_experience) " +
                 "VALUES ('" + client.getFirstName() + "', '" + client.getLastName() + "', '" +
                 DateUtil.getSQLFormatDate(client.getBirthday()) + "', " + client.getdLNumber() + ", " +
@@ -106,7 +108,7 @@ public class ClientDAOImpl implements ClientDAO {
     }
 
     @Override
-    public void update(ClientDomain client) {
+    public void update(ClientDomain client) throws SQLException {
         String query = "UPDATE client_tb SET " +
                 "first_name='" + client.getFirstName() + "', " +
                 "last_name='" + client.getLastName() + "', " +
@@ -117,7 +119,7 @@ public class ClientDAOImpl implements ClientDAO {
     }
 
     @Override
-    public void remove(ClientDomain client) {
+    public void remove(ClientDomain client) throws SQLException {
         String query = "DELETE FROM client_tb WHERE id=" + client.getId() + " AND " +
                 "first_name='" + client.getFirstName() + "' AND " +
                 "last_name='" + client.getLastName() + "' AND " +

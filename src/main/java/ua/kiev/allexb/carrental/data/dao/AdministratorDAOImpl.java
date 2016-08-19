@@ -3,8 +3,7 @@ package ua.kiev.allexb.carrental.data.dao;
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
-import ua.kiev.allexb.carrental.data.service.ConnectionFactory;
-import ua.kiev.allexb.carrental.data.service.DbUtil;
+import ua.kiev.allexb.carrental.data.service.DataBaseUtil;
 import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 import java.sql.Connection;
@@ -22,45 +21,49 @@ public class AdministratorDAOImpl implements AdministratorDAO {
 
     static final Logger logger = ApplicationLogger.getLogger(AdministratorDAO.class);
 
-    private static final int ONE = 1;
-    private static final int ALL = Integer.MAX_VALUE;
-
     private Connection connection;
     private Statement statement;
 
-    private List<AdministratorDomain> getItems(String query, int amount) {
+    public AdministratorDAOImpl() {
+    }
+
+    public AdministratorDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+
+    private List<AdministratorDomain> getItems(String query, int amount) throws SQLException {
         ResultSet resultSet = null;
         List<AdministratorDomain> clients = new ArrayList<>();
         try {
-            try {
-                connection = ConnectionFactory.getInstance().getConnection();
-                statement = connection.createStatement();
-                resultSet = statement.executeQuery(query);
-                if (resultSet!= null) {
-                    for(int i = 0; i < amount & resultSet.next(); i++) {
-                        AdministratorDomain client = new AdministratorDomain(resultSet.getLong("id"),
-                                resultSet.getString("first_name"),
-                                resultSet.getString("last_name"),
-                                resultSet.getString("email"),
-                                resultSet.getString("login"),
-                                resultSet.getString("password"));
-                        clients.add(client);
-                    }
+            if (connection == null) throw new SQLException("No connection to database.");
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            if (resultSet != null) {
+                for (int i = 0; i < amount & resultSet.next(); i++) {
+                    AdministratorDomain client = new AdministratorDomain(resultSet.getLong("id"),
+                            resultSet.getString("first_name"),
+                            resultSet.getString("last_name"),
+                            resultSet.getString("email"),
+                            resultSet.getString("login"),
+                            resultSet.getString("password"));
+                    clients.add(client);
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
         } finally {
-            DbUtil.close(resultSet);
-            DbUtil.close(statement);
-            DbUtil.close(connection);
+            DataBaseUtil.closeResultSet(resultSet);
+            DataBaseUtil.closeStatement(statement);
+            DataBaseUtil.closeConnection(connection);
         }
         logger.info("Get data query occurred.");
         return clients;
     }
 
     @Override
-    public List<AdministratorDomain> getByFullName(String firsName, String lastName) {
+    public List<AdministratorDomain> getByFullName(String firsName, String lastName) throws SQLException {
         String query = "SELECT * FROM administrator_tb WHERE first_name='" + firsName + "' AND last_name='" + lastName + "'";
         List<AdministratorDomain> administrators = this.getItems(query, ALL);
         return administrators;
@@ -72,43 +75,47 @@ public class AdministratorDAOImpl implements AdministratorDAO {
     }
 
     @Override
-    public AdministratorDomain getByLoginAndPassword(String login, String password) {
+    public AdministratorDomain getByLoginAndPassword(String login, String password) throws SQLException {
         String query = "SELECT * FROM administrator_tb WHERE login='" + login + "' AND password='" + password + "'";
         List<AdministratorDomain> administrators = this.getItems(query, ONE);
         return administrators.isEmpty() ? null : administrators.get(0);
     }
 
     @Override
-    public List<AdministratorDomain> getAll() {
+    public AdministratorDomain getByLogin(String login) throws SQLException {
+        String query = "SELECT * FROM administrator_tb WHERE login='" + login + "'";
+        List<AdministratorDomain> administrators = this.getItems(query, ONE);
+        return administrators.isEmpty() ? null : administrators.get(0);
+    }
+
+    @Override
+    public List<AdministratorDomain> getAll() throws SQLException {
         String query = "SELECT * FROM administrator_tb";
         List<AdministratorDomain> administrators = this.getItems(query, ALL);
         return administrators;
     }
 
     @Override
-    public AdministratorDomain getById(Long id) {
+    public AdministratorDomain getById(Long id) throws SQLException {
         String query = "SELECT * FROM administrator_tb WHERE id=" + id;
         List<AdministratorDomain> administrators = this.getItems(query, ONE);
         return administrators.isEmpty() ? null : administrators.get(0);
     }
 
-    private void dataChangeQuery(String query) {
+    private void dataChangeQuery(String query) throws SQLException {
         try {
-            try {
-                connection = ConnectionFactory.getInstance().getConnection();
-                statement = connection.createStatement();
-                statement.executeUpdate(query);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            if (connection == null) throw new SQLException("No connection to database.");
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
         } finally {
-            DbUtil.close(statement);
-            DbUtil.close(connection);
+            DataBaseUtil.closeStatement(statement);
+            DataBaseUtil.closeConnection(connection);
         }
         logger.info("Add or change data query occurred.");
     }
+
     @Override
-    public void add(AdministratorDomain administrator) {
+    public void add(AdministratorDomain administrator) throws SQLException {
         String query = "INSERT INTO administrator_tb(first_name, last_name, email, login, password) " +
                 "SELECT * FROM (SELECT '" + administrator.getFirstName() + "', '" + administrator.getLastName() + "', '" +
                 administrator.getEmail() + "', '" + administrator.getLogin() + "', '" +
@@ -119,7 +126,7 @@ public class AdministratorDAOImpl implements AdministratorDAO {
     }
 
     @Override
-    public void update(AdministratorDomain administrator) {
+    public void update(AdministratorDomain administrator) throws SQLException {
         String query = "UPDATE administrator_tb SET " +
                 "first_name='" + administrator.getFirstName() + "', " +
                 "last_name='" + administrator.getLastName() + "', " +
@@ -131,7 +138,7 @@ public class AdministratorDAOImpl implements AdministratorDAO {
     }
 
     @Override
-    public void remove(AdministratorDomain administrator) {
+    public void remove(AdministratorDomain administrator) throws SQLException {
         String query = "DELETE FROM administrator_tb WHERE id=" + administrator.getId() + " AND " +
                 "first_name='" + administrator.getFirstName() + "' AND " +
                 "last_name='" + administrator.getLastName() + "' AND " +
