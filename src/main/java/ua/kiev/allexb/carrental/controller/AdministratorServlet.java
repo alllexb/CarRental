@@ -46,7 +46,9 @@ public class AdministratorServlet extends HttpServlet {
                 logger.info("Administrators list extracted.");
             } catch (SQLException ex) {
                 logger.warn("Data base exception.", ex);
-                request.setAttribute("errorString", ex.getMessage());
+                request.setAttribute("javax.servlet.error.exception", ex);
+                request.setAttribute("javax.servlet.error.status_code", 500);
+                response.setStatus(500);
             }
             request.setAttribute("admins_list", administrators);
             RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/adminsView.jsp");

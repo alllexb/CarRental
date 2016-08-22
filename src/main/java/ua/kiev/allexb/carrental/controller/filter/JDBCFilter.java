@@ -65,7 +65,6 @@ public class JDBCFilter implements Filter {
                 chain.doFilter(request, response);
             } catch (SQLException ex) {
                 logger.warn("Data base failed!", ex);
-                request.setAttribute("errorString", "Data base doesn't work. Please, visit as later.");
                 chain.doFilter(request, response);
             } catch (Exception ex) {
                 logger.warn("Connection exception!", ex);

@@ -79,3 +79,43 @@ table {
 .error {
     color: red;
 }
+
+#home-button {
+    /*background-image:url(../images/home_button.png);*/
+    /*display:block;*/
+    max-height: 40px;
+    max-height: 283px;
+    border: 0px;
+}
+
+#error_box {
+    display: table;
+    width: 100%;
+}
+
+.cell {
+    display: table-cell;
+    vertical-align: middle;
+    height: 600px;
+}
+
+.content {
+    text-align: center;
+    margin: 10px 10px 10px 10px;
+}
+
+.content h3{
+    font-weight: normal;
+}
+
+.content_img {
+    float: right;
+    margin: 10px 10px 10px 10px;
+}
+
+.content_img > img {
+    height: auto;
+    width: auto;
+    max-height: 400px;
+    max-width: 400px;
+}

@@ -44,7 +44,9 @@ public class CarServlet extends HttpServlet {
             logger.info("Cars list extracted.");
         } catch (SQLException ex) {
             logger.warn("Data base exception.", ex);
-            request.setAttribute("errorString", ex.getMessage());
+            request.setAttribute("javax.servlet.error.exception", ex);
+            request.setAttribute("javax.servlet.error.status_code", 500);
+            response.setStatus(500);
         }
         request.setAttribute("cars_list", cars);
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/carsView.jsp");

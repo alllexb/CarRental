@@ -66,7 +66,10 @@ public class DoLoginServlet extends HttpServlet {
             } catch (SQLException ex) {
                 logger.warn("Data base exception.", ex);
                 hasError = true;
-                errorString = ex.getMessage();
+                errorString = "Sorry... Data base does not respond.";
+                request.setAttribute("javax.servlet.error.exception", ex);
+                request.setAttribute("javax.servlet.error.status_code", 500);
+                response.setStatus(500);
             }
         }
 
