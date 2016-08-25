@@ -17,9 +17,10 @@ import java.io.IOException;
  * @version 1.0 19.08.2016
  */
 @WebServlet(urlPatterns = {"/logout"})
-public class LogoutServlet extends HttpServlet {
+public class DoLogoutServlet extends HttpServlet {
+    private static final long serialVersionUID = 8244392699971640663L;
 
-    static final Logger logger = ApplicationLogger.getLogger(LogoutServlet.class);
+    static final Logger logger = ApplicationLogger.getLogger(DoLogoutServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,7 +31,7 @@ public class LogoutServlet extends HttpServlet {
             logger.info("Administrator logouted.");
             response.sendRedirect(request.getHeader("Referer"));
         } else {
-            logger.info("No logined user. Redirect to login page.");
+            logger.info("No logined administrator. Redirect to login page.");
             RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/loginView.jsp");
             dispatcher.forward(request, response);
         }

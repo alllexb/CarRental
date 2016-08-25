@@ -40,7 +40,7 @@ public class DoLoginServlet extends HttpServlet {
         logger.info("Started login procedure.");
 
         String login = request.getParameter("login");
-        String password = PasswordHelper.getSecurePassword(request.getParameter("password"));
+        String password = request.getParameter("password");
         String rememberMeStr = request.getParameter("rememberMe");
         boolean remember = "Y".equals(rememberMeStr);
 
@@ -56,7 +56,7 @@ public class DoLoginServlet extends HttpServlet {
             Connection connection = StoreAndCookieUtil.getStoredConnection(request);
             try {
                 AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
-                AdministratorDomain domain = administratorDAO.getByLoginAndPassword(login, password);
+                AdministratorDomain domain = administratorDAO.getByLoginAndPassword(login, PasswordHelper.getSecurePassword(password));
                 administrator = (domain == null) ? null : domain.getAdministrator();
                 if (administrator == null) {
                     hasError = true;
@@ -108,7 +108,7 @@ public class DoLoginServlet extends HttpServlet {
             // Redirect to last visited page or home.
             logger.info("Administrator logined correctly.");
             String header = request.getHeader("Referer");
-            if (header.endsWith("/login")) {
+            if (header.endsWith("/login") || header.endsWith("/logout")) {
                 response.sendRedirect(request.getContextPath() + "/home");
             } else {
                 response.sendRedirect(header);

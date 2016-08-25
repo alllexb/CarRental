@@ -4,13 +4,13 @@
 <div id="main_menu">
   <a href="${pageContext.request.contextPath}/">Home</a>
 <c:if test="${admin != null && admin.id != 0}">  |
-  <a href="${pageContext.request.contextPath}/admins">Administrators List</a>
+  <a href="${pageContext.request.contextPath}/admin_list">Administrators List</a>
   |
-  <a href="${pageContext.request.contextPath}/clients">Clients List</a>
+  <a href="${pageContext.request.contextPath}/client_list">Clients List</a>
 </c:if>  |
-  <a href="${pageContext.request.contextPath}/cars">Cars List</a>
+  <a href="${pageContext.request.contextPath}/car_list">Cars List</a>
 <c:if test="${admin != null && admin.id != 0}">  |
-  <a href="${pageContext.request.contextPath}/orders">Order List</a>
+  <a href="${pageContext.request.contextPath}/order_list">Order List</a>
 </c:if>  |
 <c:choose>
 <c:when test="${admin == null || admin.id == 0}">

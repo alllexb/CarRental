@@ -1,10 +1,11 @@
 package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
-import ua.kiev.allexb.carrental.data.dao.AdministratorDAO;
-import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
-import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
+import ua.kiev.allexb.carrental.data.dao.ClientDAO;
+import ua.kiev.allexb.carrental.data.dao.ClientDAOImpl;
+import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.model.Administrator;
+import ua.kiev.allexb.carrental.model.Client;
 import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
@@ -24,12 +25,12 @@ import java.util.stream.Collectors;
  * @author allexb
  * @version 1.0 11.08.2016
  */
-@WebServlet(urlPatterns = {"/admins"})
-public class AdministratorServlet extends HttpServlet {
-    private static final long serialVersionUID = -928176549145443440L;
-    static final Logger logger = ApplicationLogger.getLogger(AdministratorServlet.class);
+@WebServlet(urlPatterns = {"/client_list"})
+public class ClientListServlet extends HttpServlet {
+    private static final long serialVersionUID = -5098121881329935823L;
+    static final Logger logger = ApplicationLogger.getLogger(ClientListServlet.class);
 
-    public AdministratorServlet() {
+    public ClientListServlet() {
         super();
     }
 
@@ -37,21 +38,21 @@ public class AdministratorServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Administrator loginedAdministrator = StoreAndCookieUtil.getLoginedAdministrator(request.getSession());
         if (loginedAdministrator != null) {
-            logger.info("Extracting of administrators list from database.");
-            List<Administrator> administrators = null;
+            logger.info("Extracting of client list list from database.");
+            List<Client> clientList = null;
             Connection connection = StoreAndCookieUtil.getStoredConnection(request);
             try {
-                AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
-                administrators = administratorDAO.getAll().stream().map(AdministratorDomain::getAdministrator).collect(Collectors.toList());
-                logger.info("Administrators list extracted.");
+                ClientDAO clientDAO = new ClientDAOImpl(connection);
+                clientList = clientDAO.getAll().stream().map(ClientDomain::getClient).collect(Collectors.toList());
+                logger.info("Client list list extracted.");
             } catch (SQLException ex) {
                 logger.warn("Data base exception.", ex);
                 request.setAttribute("javax.servlet.error.exception", ex);
                 request.setAttribute("javax.servlet.error.status_code", 500);
                 response.setStatus(500);
             }
-            request.setAttribute("admins_list", administrators);
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/adminsView.jsp");
+            request.setAttribute("clientList", clientList);
+            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/clientListView.jsp");
             dispatcher.forward(request, response);
         } else {
             logger.info("Request without authentication. Access denied.");
@@ -66,4 +67,3 @@ public class AdministratorServlet extends HttpServlet {
         doGet(request, response);
     }
 }
-

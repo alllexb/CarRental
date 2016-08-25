@@ -5,37 +5,35 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
   <link rel="stylesheet" type="text/css" href='<c:url value="/css/main.css"/>' />
-  <title>Cars List</title>
+  <title>Client List</title>
 </head>
 <body>
 
 <jsp:include page="_header.jsp"></jsp:include>
 <jsp:include page="_menu.jsp"></jsp:include>
-<h3>Cars List</h3>
+
+<h3>Client List</h3>
 <c:if test="${errorString != null}"><p class="error">${errorString}</p></c:if>
 
 <table cellpadding="0" class="print_table">
   <thead>
   <tr>
-    <th>Model</th>
-    <th>Color</th>
-    <th>Year of manufacture</th>
-    <th>Rental Price</th>
-    <th>Rented</th>
-    <th>Description</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Birthday</th>
+    <th>DL Number</th>
+    <th>Length of driving experience</th>
   </tr>
   </thead>
   <tbody>
   <%! Integer counter = 0; %>
-  <c:forEach items="${cars_list}" var="car">
-    <% if (counter%2 == 0) {out.println("<tr class = \"even\">");
-    } else {out.println("<tr>"); }%>
-    <td>${car.model}</td>
-    <td>${car.color}</td>
-    <td>${car.yearOfManufacture}</td>
-    <td>${car.rentalPrice}</td>
-    <td><input type="checkbox" <c:if test="${car.rented}"> checked="checked" </c:if> onclick="return false;"/></td>
-    <td>${car.description}</td>
+  <c:forEach items="${clientList}" var="client">
+    <% if (counter%2 == 0) { %><tr class="even"><%} else {%><tr><%}%>
+    <td>${client.firstName}</td>
+    <td>${client.lastName}</td>
+    <td>${client.birthday}</td>
+    <td>${client.dLNumber}</td>
+    <td>${client.lengthOfDrivingExperience}</td>
     </tr>
     <% counter++; %>
   </c:forEach>

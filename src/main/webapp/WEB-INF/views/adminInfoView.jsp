@@ -13,10 +13,13 @@
 <jsp:include page="_menu.jsp"></jsp:include>
 
 <h3>Administrator Information Page</h3>
+<c:if test="${errorString != null}"><p class="error">${errorString}</p></c:if>
 
 <h4> Hello: ${admin.firstName} ${admin.lastName}</h4>
 <h4> Login: ${admin.login}</h4>
 <h4> E-mail: ${admin.email}</h4>
+
+<a href="${pageContext.request.contextPath}/logout">LogOut</a>
 
 <jsp:include page="_footer.jsp"></jsp:include>
 

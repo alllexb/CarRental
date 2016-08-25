@@ -39,12 +39,14 @@ public class CookieFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        logger.info("Cookie Filter");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpSession session = httpRequest.getSession();
 
         Administrator adminInSession = StoreAndCookieUtil.getLoginedAdministrator(session);
 
         if (adminInSession != null) {
+            logger.info("Administrator checked in cookie.");
             session.setAttribute("COOKIE_CHECKED", "CHECKED");
             chain.doFilter(request, response);
             return;

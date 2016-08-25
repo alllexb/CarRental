@@ -18,6 +18,7 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/errorHandler"})
 public class ErrorHandler extends HttpServlet {
+    private static final long serialVersionUID = 4004338792160393545L;
 
     static final Logger logger = ApplicationLogger.getLogger(ErrorHandler.class);
 

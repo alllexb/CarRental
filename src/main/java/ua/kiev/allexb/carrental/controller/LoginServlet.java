@@ -1,7 +1,9 @@
 package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
+import ua.kiev.allexb.carrental.model.Administrator;
 import ua.kiev.allexb.carrental.utils.ApplicationLogger;
+import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -28,9 +30,14 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("Request to page: " + request.getServletPath());
-        // Forward to /WEB-INF/views/loginView.jsp
-        // (Users can not access directly into JSP pages placed in WEB-INF)
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/loginView.jsp");
+        Administrator loginedAdministrator = StoreAndCookieUtil.getLoginedAdministrator(request.getSession());
+        RequestDispatcher dispatcher;
+        if (loginedAdministrator != null) {
+            request.setAttribute("errorString", "You need to logout before changing administrator account.");
+            dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/adminInfoView.jsp");
+        } else {
+            dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/loginView.jsp");
+        }
         dispatcher.forward(request, response);
     }
 
