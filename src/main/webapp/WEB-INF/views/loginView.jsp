@@ -8,14 +8,11 @@
     <title>Login Page</title>
 </head>
 <body>
-
-<jsp:include page="_header.jsp"></jsp:include>
-<jsp:include page="_menu.jsp"></jsp:include>
-
-<h3>Login Page</h3>
+<jsp:include page="_header.jsp"/>
+<jsp:include page="_menu.jsp"/>
+<div class="headline"><h3>Login Page</h3></div>
 <c:if test="${errorString != null}"><p class="error">${errorString}</p></c:if>
-
-<form method="POST" action="doLogin">
+<form method="POST" action="${pageContext.request.contextPath}/doLogin">
     <table border="0">
         <tr>
             <td>Administrator Login</td>
@@ -36,10 +33,7 @@
         </tr>
     </table>
 </form>
-
 <p style="color:blue;">Admin Name: admin-bj, password: bj1212!</p>
-
-<jsp:include page="_footer.jsp"></jsp:include>
-
+<jsp:include page="_footer.jsp"/>
 </body>
 </html>

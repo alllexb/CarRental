@@ -56,7 +56,6 @@ public class AdministratorDAOImpl implements AdministratorDAO {
         } finally {
             DataBaseUtil.closeResultSet(resultSet);
             DataBaseUtil.closeStatement(statement);
-            DataBaseUtil.closeConnection(connection);
         }
         logger.info("Get data query occurred.");
         return clients;
@@ -106,10 +105,13 @@ public class AdministratorDAOImpl implements AdministratorDAO {
         try {
             if (connection == null) throw new SQLException("No connection to database.");
             statement = connection.createStatement();
-            statement.executeUpdate(query);
+            int items = statement.executeUpdate(query);
+            if (items == 0) logger.info("No entities changed.");
+        } catch (Exception ex) {
+            logger.info("Fail in data base changing.", ex);
+            throw new SQLException(ex);
         } finally {
             DataBaseUtil.closeStatement(statement);
-            DataBaseUtil.closeConnection(connection);
         }
         logger.info("Add or change data query occurred.");
     }

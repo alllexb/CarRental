@@ -8,10 +8,8 @@
   <title>Error Page</title>
 </head>
 <body>
-
-<jsp:include page="_header.jsp"></jsp:include>
-<jsp:include page="_menu.jsp"></jsp:include>
-
+<jsp:include page="_header.jsp"/>
+<jsp:include page="_menu.jsp"/>
 <div id="error_box">
   <div class="cell">
     <div class="content_img">
@@ -25,12 +23,10 @@
 
       <h3> ${error_comment}</h3>
 
-      <a href="<c:url value="/"/>" title="Car Rental Service"><img src="<c:url value="/images/home_button.png"/>" id="home-button"></a>
+      <p><a class="button-link" href="<c:url value="/"/>">Return to the homepage</a></p>
     </div>
   </div>
 </div>
-
-<jsp:include page="_footer.jsp"></jsp:include>
-
+<jsp:include page="_footer.jsp"/>
 </body>
 </html>

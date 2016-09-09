@@ -9,10 +9,10 @@
 </head>
 <body>
 
-<jsp:include page="_header.jsp"></jsp:include>
-<jsp:include page="_menu.jsp"></jsp:include>
+<jsp:include page="_header.jsp"/>
+<jsp:include page="_menu.jsp"/>
 
-<h3>Client List</h3>
+<div class="headline"><h3>Client List</h3></div>
 <c:if test="${errorString != null}"><p class="error">${errorString}</p></c:if>
 
 <table cellpadding="0" class="print_table">
@@ -40,7 +40,7 @@
   </tbody>
 </table>
 
-<jsp:include page="_footer.jsp"></jsp:include>
+<jsp:include page="_footer.jsp"/>
 
 </body>
 </html>

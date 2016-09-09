@@ -28,11 +28,11 @@ public class JDBCFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
+        logger.info("JDBC Filter initialized.");
     }
 
     private boolean needJDBC(HttpServletRequest request) {
-        logger.info("JDBC Filter");
+        logger.info("Search for connection.");
         String servletPath = request.getServletPath();
         String pathInfo = request.getPathInfo();
         String urlPattern = servletPath;
@@ -54,6 +54,7 @@ public class JDBCFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        logger.info("JDBC Filter called.");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         if (this.needJDBC(httpRequest)) {
             logger.info("Open Connection for: " + httpRequest.getServletPath());
@@ -63,6 +64,8 @@ public class JDBCFilter implements Filter {
                 connection.setAutoCommit(false);
                 StoreAndCookieUtil.storeConnection(request, connection);
                 chain.doFilter(request, response);
+                connection.commit();
+                logger.info("Changes in connection provided for " + httpRequest.getServletPath() + " committed.");
             } catch (SQLException ex) {
                 logger.warn("Data base failed!", ex);
                 chain.doFilter(request, response);

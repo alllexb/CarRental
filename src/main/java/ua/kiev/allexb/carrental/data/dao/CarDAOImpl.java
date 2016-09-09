@@ -2,7 +2,6 @@ package ua.kiev.allexb.carrental.data.dao;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.domain.CarDomain;
-import ua.kiev.allexb.carrental.data.service.ConnectionFactory;
 import ua.kiev.allexb.carrental.data.service.DataBaseUtil;
 import ua.kiev.allexb.carrental.model.Car;
 import ua.kiev.allexb.carrental.utils.ApplicationLogger;
@@ -41,14 +40,14 @@ public class CarDAOImpl implements CarDAO {
         List<CarDomain> cars = new ArrayList<>();
         try {
             if (connection == null) throw new SQLException("No connection to database.");
-            connection = ConnectionFactory.getInstance().getConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             if (resultSet != null) {
                 for (int i = 0; i < amount & resultSet.next(); i++) {
                     CarDomain car = new CarDomain(resultSet.getLong("id"),
+                            resultSet.getString("number_plate"),
                             resultSet.getString("model"),
-                            Car.Color.valueOf(resultSet.getString("color")),
+                            Car.Color.valueOf(resultSet.getString("color") == null ? "NAN" : resultSet.getString("color")),
                             resultSet.getString("description"),
                             resultSet.getInt("year_of_manufacture"),
                             resultSet.getBigDecimal("rental_price"),
@@ -59,7 +58,6 @@ public class CarDAOImpl implements CarDAO {
         } finally {
             DataBaseUtil.closeResultSet(resultSet);
             DataBaseUtil.closeStatement(statement);
-            DataBaseUtil.closeConnection(connection);
         }
         logger.info("Get data query occurred.");
         return cars;
@@ -67,6 +65,13 @@ public class CarDAOImpl implements CarDAO {
 
     public CarDomain getByModel(String model) throws SQLException {
         String query = "SELECT * FROM car_tb WHERE model='" + model + "'";
+        List<CarDomain> cars = getItems(query, ONE);
+        return cars.isEmpty() ? null : cars.get(0);
+    }
+
+    @Override
+    public CarDomain getByNumberPlate(String numberPlate) throws SQLException {
+        String query = "SELECT * FROM car_tb WHERE number_plate='" + numberPlate + "'";
         List<CarDomain> cars = getItems(query, ONE);
         return cars.isEmpty() ? null : cars.get(0);
     }
@@ -85,25 +90,28 @@ public class CarDAOImpl implements CarDAO {
     private void dataChangeQuery(String query) throws SQLException {
         try {
             if (connection == null) throw new SQLException("No connection to database.");
-            connection = ConnectionFactory.getInstance().getConnection();
             statement = connection.createStatement();
-            statement.executeUpdate(query);
-        } finally {
+            int items = statement.executeUpdate(query);
+            if (items == 0) logger.info("No entities changed.");
+        } catch (Exception ex) {
+            logger.info("Fail in data base changing.", ex);
+            throw new SQLException(ex);
+        }finally {
             DataBaseUtil.closeStatement(statement);
-            DataBaseUtil.closeConnection(connection);
         }
         logger.info("Add or change data query occurred.");
     }
 
     public void add(CarDomain car) throws SQLException {
-        String query = "INSERT INTO car_tb(model, color, description, year_of_manufacture, rental_price, rented)" +
-                " VALUES ('" + car.getModel() + "', '" + car.getColor() + "', '" + car.getDescription() +
+        String query = "INSERT INTO car_tb(number_plate, model, color, description, year_of_manufacture, rental_price, rented)" +
+                " VALUES ('" + car.getNumberPlate() + "', '" + car.getModel() + "', '" + car.getColor() + "', '" + car.getDescription() +
                 "', " + car.getYearOfManufacture() + ", " + car.getRentalPrice() + ", " + car.isRented() + ")";
         this.dataChangeQuery(query);
     }
 
     public void update(CarDomain car) throws SQLException {
         String query = "UPDATE car_tb SET " +
+                "number_plate='" + car.getNumberPlate() + "', " +
                 "model='" + car.getModel() + "', " +
                 "color='" + car.getColor() + "', " +
                 "description='" + car.getDescription() + "', " +
@@ -115,6 +123,7 @@ public class CarDAOImpl implements CarDAO {
 
     public void remove(CarDomain car) throws SQLException {
         String query = "DELETE FROM car_tb WHERE id=" + car.getId() + " AND " +
+                "number_plate='" + car.getNumberPlate() +  "' AND " +
                 "model='" + car.getModel() + "' AND " +
                 "color='" + car.getColor() + "' AND " +
                 "description='" + car.getDescription() + "' AND " +

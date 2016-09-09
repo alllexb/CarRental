@@ -10,6 +10,7 @@ import java.math.BigDecimal;
  */
 public class CarDomain extends AbstractDomain {
 
+    private String numberPlate;
     private String model;
     private Car.Color color;
     private String description;
@@ -17,8 +18,9 @@ public class CarDomain extends AbstractDomain {
     private BigDecimal rentalPrice;
     private boolean rented;
 
-    public CarDomain(Long id, String model, Car.Color color, String description, int yearOfManufacture, BigDecimal rentalPrice, boolean rented) {
+    public CarDomain(Long id, String numberPlate, String model, Car.Color color, String description, int yearOfManufacture, BigDecimal rentalPrice, boolean rented) {
         super(id);
+        this.numberPlate = numberPlate;
         this.model = model;
         this.color = color;
         this.description = description;
@@ -35,18 +37,27 @@ public class CarDomain extends AbstractDomain {
     }
 
     public Car getCar() {
-        return new Car(this.getId(), this.model, this.color, this.description, this.yearOfManufacture,
+        return new Car(this.getId(), this.numberPlate, this.model, this.color, this.description, this.yearOfManufacture,
                 this.rentalPrice, this.rented);
     }
 
     public void setCar(Car car) {
         super.setId(car.getId());
+        this.numberPlate = car.getNumberPlate();
         this.model = car.getModel();
         this.color = car.getColor();
         this.description = car.getDescription();
         this.yearOfManufacture = car.getYearOfManufacture();
         this.rentalPrice = car.getRentalPrice();
         this.rented = car.isRented();
+    }
+
+    public String getNumberPlate() {
+        return numberPlate;
+    }
+
+    public void setNumberPlate(String numberPlate) {
+        this.numberPlate = numberPlate;
     }
 
     public String getModel() {

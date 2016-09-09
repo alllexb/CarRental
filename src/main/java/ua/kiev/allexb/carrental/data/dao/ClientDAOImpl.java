@@ -3,7 +3,6 @@ package ua.kiev.allexb.carrental.data.dao;
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.util.DateUtil;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
-import ua.kiev.allexb.carrental.data.service.ConnectionFactory;
 import ua.kiev.allexb.carrental.data.service.DataBaseUtil;
 import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
@@ -41,7 +40,6 @@ public class ClientDAOImpl implements ClientDAO {
         List<ClientDomain> clients = new ArrayList<>();
         try {
             if (connection == null) throw new SQLException("No connection to database.");
-            connection = ConnectionFactory.getInstance().getConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             if (resultSet != null) {
@@ -58,7 +56,6 @@ public class ClientDAOImpl implements ClientDAO {
         } finally {
             DataBaseUtil.closeResultSet(resultSet);
             DataBaseUtil.closeStatement(statement);
-            DataBaseUtil.closeConnection(connection);
         }
         logger.info("Get data query occurred.");
         return clients;
@@ -88,12 +85,14 @@ public class ClientDAOImpl implements ClientDAO {
     private void dataChangeQuery(String query) throws SQLException {
         try {
             if (connection == null) throw new SQLException("No connection to database.");
-            connection = ConnectionFactory.getInstance().getConnection();
             statement = connection.createStatement();
-            statement.executeUpdate(query);
+            int items = statement.executeUpdate(query);
+            if (items == 0) logger.info("No entities changed.");
+        } catch (Exception ex) {
+            logger.info("Fail in data base changing.", ex);
+            throw new SQLException(ex);
         } finally {
             DataBaseUtil.closeStatement(statement);
-            DataBaseUtil.closeConnection(connection);
         }
         logger.info("Add or change data query occurred.");
     }

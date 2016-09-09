@@ -30,6 +30,7 @@ public class CookieFilter implements Filter {
 
     @Override
     public void init(FilterConfig fConfig) throws ServletException {
+        logger.info("Cookie Filter initialized.");
     }
 
     @Override
@@ -39,7 +40,7 @@ public class CookieFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        logger.info("Cookie Filter");
+        logger.info("Cookie Filter called.");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpSession session = httpRequest.getSession();
 

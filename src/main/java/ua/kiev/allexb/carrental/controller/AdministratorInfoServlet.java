@@ -22,6 +22,7 @@ import java.io.IOException;
 public class AdministratorInfoServlet extends HttpServlet {
     private static final long serialVersionUID = -2331263390335838695L;
     static final Logger logger = ApplicationLogger.getLogger(AdministratorInfoServlet.class);
+
     public AdministratorInfoServlet() {
         super();
     }
@@ -29,23 +30,9 @@ public class AdministratorInfoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        logger.info("Getting logined administrator.");
-        // Check User has logged on
         Administrator loginedAdministrator = StoreAndCookieUtil.getLoginedAdministrator(session);
-
-        // Not logged in
-        if (loginedAdministrator == null) {
-            logger.info("No logined administrator.");
-            // Redirect to login page.
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
-
-        // Store info in request attribute
         request.setAttribute("admin", loginedAdministrator);
-
         logger.info("Redirect to administrator view page.");
-        // Logined, forward to /WEB-INF/views/adminInfoView.jsp
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/adminInfoView.jsp");
         dispatcher.forward(request, response);
     }

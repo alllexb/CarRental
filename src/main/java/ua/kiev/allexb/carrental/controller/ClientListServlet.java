@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.ClientDAO;
 import ua.kiev.allexb.carrental.data.dao.ClientDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
-import ua.kiev.allexb.carrental.model.Administrator;
 import ua.kiev.allexb.carrental.model.Client;
 import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
@@ -36,30 +35,22 @@ public class ClientListServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Administrator loginedAdministrator = StoreAndCookieUtil.getLoginedAdministrator(request.getSession());
-        if (loginedAdministrator != null) {
-            logger.info("Extracting of client list list from database.");
-            List<Client> clientList = null;
-            Connection connection = StoreAndCookieUtil.getStoredConnection(request);
-            try {
-                ClientDAO clientDAO = new ClientDAOImpl(connection);
-                clientList = clientDAO.getAll().stream().map(ClientDomain::getClient).collect(Collectors.toList());
-                logger.info("Client list list extracted.");
-            } catch (SQLException ex) {
-                logger.warn("Data base exception.", ex);
-                request.setAttribute("javax.servlet.error.exception", ex);
-                request.setAttribute("javax.servlet.error.status_code", 500);
-                response.setStatus(500);
-            }
-            request.setAttribute("clientList", clientList);
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/clientListView.jsp");
-            dispatcher.forward(request, response);
-        } else {
-            logger.info("Request without authentication. Access denied.");
-            request.setAttribute("errorString", "Access denied! Login previously.");
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/loginView.jsp");
-            dispatcher.forward(request, response);
+        logger.info("Extracting of client list list from database.");
+        List<Client> clientList = null;
+        Connection connection = StoreAndCookieUtil.getStoredConnection(request);
+        try {
+            ClientDAO clientDAO = new ClientDAOImpl(connection);
+            clientList = clientDAO.getAll().stream().map(ClientDomain::getClient).collect(Collectors.toList());
+            logger.info("Client list list extracted.");
+        } catch (SQLException ex) {
+            logger.warn("Data base exception.", ex);
+            request.setAttribute("javax.servlet.error.exception", ex);
+            request.setAttribute("javax.servlet.error.status_code", 500);
+            response.setStatus(500);
         }
+        request.setAttribute("clientList", clientList);
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/clientListView.jsp");
+        dispatcher.forward(request, response);
     }
 
     @Override

@@ -9,18 +9,20 @@ import java.math.BigDecimal;
 public class Car {
 
     private long id;
+    private String numberPlate;
     private String model;
     private Color color;
     private String description;
     private int yearOfManufacture;
     private BigDecimal rentalPrice;
-    private boolean  rented;
+    private boolean rented;
 
     public Car() {
     }
 
-    public Car(long id, String model, Color color, String description, int yearOfManufacture, BigDecimal rentalPrice, boolean rented) {
+    public Car(long id, String numberPlate, String model, Color color, String description, int yearOfManufacture, BigDecimal rentalPrice, boolean rented) {
         this.id = id;
+        this.numberPlate = numberPlate;
         this.model = model;
         this.color = color;
         this.description = description;
@@ -35,6 +37,14 @@ public class Car {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getNumberPlate() {
+        return numberPlate;
+    }
+
+    public void setNumberPlate(String numberPlate) {
+        this.numberPlate = numberPlate;
     }
 
     public String getModel() {
@@ -86,9 +96,27 @@ public class Car {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Car car = (Car) o;
+
+        if (id != car.id) return false;
+        if (yearOfManufacture != car.yearOfManufacture) return false;
+        if (rented != car.rented) return false;
+        if (!numberPlate.equals(car.numberPlate)) return false;
+        if (model != null ? !model.equals(car.model) : car.model != null) return false;
+        if (color != car.color) return false;
+        if (description != null ? !description.equals(car.description) : car.description != null) return false;
+        return !(rentalPrice != null ? !rentalPrice.equals(car.rentalPrice) : car.rentalPrice != null);
+    }
+
+    @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + model.hashCode();
+        result = 31 * result + numberPlate.hashCode();
+        result = 31 * result + (model != null ? model.hashCode() : 0);
         result = 31 * result + (color != null ? color.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + yearOfManufacture;
@@ -101,6 +129,7 @@ public class Car {
     public String toString() {
         return "Car{" +
                 "id=" + id +
+                ", numberPlate='" + numberPlate + '\'' +
                 ", model='" + model + '\'' +
                 ", color=" + color +
                 ", description='" + description + '\'' +
@@ -110,5 +139,5 @@ public class Car {
                 '}';
     }
 
-    public enum Color {WHITE, BLACK, RED, YELLOW, GREEN, BLUE}
+    public enum Color {NAN, WHITE, BLACK, GREY, RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE, PINK, BROWN, GOLD, SILVER, BRONZE}
 }

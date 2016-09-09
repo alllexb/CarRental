@@ -1,0 +1,79 @@
+#hike_logo_img {
+    background-position: 0 0;
+    display: none;
+}
+
+#form_container {
+    /*background:url() no-repeat;*/
+
+    position: relative;
+
+    /*height: 560px;*/
+    width: 580px;
+    margin: 20px auto 10px;
+    left: 0;
+    right: 0;
+}
+
+#form_input {
+    position:absolute;
+    background: #fcfff1;
+
+    /*height: 550px;*/
+    width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 0px 0px 7px #000;
+    -webkit-box-shadow: 0px 0px 7px #000;
+    box-shadow: 0px 0px 7px #000;
+}
+
+#form_container p {
+    color: #346a2e;
+    padding: 10px 20px 20px 20px;
+    text-align: center;
+    font-size: 17px;
+}
+
+.form_labels {
+    padding-left: 38px;
+    color: #1a6e34;
+    margin-top: -20px;
+}
+
+.form_labels label {
+}
+
+.form_labels input, select {
+    width: 465px;
+    height: 30px;
+    border: 1px solid #469d6a;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.form_labels input#rented {
+    width: 20px;
+    height: 20px;
+    border: none;
+    margin-bottom: 0px;
+    vertical-align: text-bottom;
+}
+
+.form_labels input#button {
+    width: 75px;
+    height: 30px;
+    background: #afffac;
+    /*background: linear-gradient(to top, #afffac 0%, #5ccd89 36%, #0d736e 100%);;*/
+    border: 1px solid #717171;
+    font-weight:bold;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    margin-bottom: 30px;
+}
