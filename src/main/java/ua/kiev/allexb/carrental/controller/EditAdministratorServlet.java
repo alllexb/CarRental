@@ -49,7 +49,7 @@ public class EditAdministratorServlet extends HttpServlet {
             if (administrator != null) {
                 logger.info("Administrator data entered correctly.");
                 request.setAttribute("administrator", administrator.getAdministrator());
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/editAdministratorView.jsp");
+                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/editAdminView.jsp");
                 dispatcher.forward(request, response);
             } else {
                 request.setAttribute("errorString", "Administrator with ID: #" + id + " does not exists.");
@@ -123,7 +123,7 @@ public class EditAdministratorServlet extends HttpServlet {
         }
         request.setAttribute("administrator", administrator);
         request.setAttribute("errorString", errorString.toString());
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/editAdministratorView.jsp");
+        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/editAdminView.jsp");
         dispatcher.forward(request, response);
     }
 }

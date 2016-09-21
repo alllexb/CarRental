@@ -36,7 +36,7 @@ public class CreateAdministratorServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("Administrator creating form.");
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createAdministratorView.jsp");
+        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createAdminView.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -81,7 +81,7 @@ public class CreateAdministratorServlet extends HttpServlet {
             return;
         }
         request.setAttribute("errorString", errorString.toString());
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createAdministratorView.jsp");
+        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createAdminView.jsp");
         dispatcher.forward(request, response);
     }
 }

@@ -47,7 +47,7 @@ public class DeleteAdministratorServlet extends HttpServlet {
             if (administrator != null) {
                 logger.info("Administrator data entered correctly.");
                 request.setAttribute("administrator", administrator.getAdministrator());
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/deleteAdministratorView.jsp");
+                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/deleteAdminView.jsp");
                 dispatcher.forward(request, response);
             } else {
                 request.setAttribute("errorString", "Administrator with ID: #" + id + " does not exists.");
