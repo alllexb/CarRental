@@ -1,12 +1,12 @@
 package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
-import ua.kiev.allexb.carrental.controller.validator.CarValidator;
+import ua.kiev.allexb.carrental.controller.validator.AdministratorValidator;
 import ua.kiev.allexb.carrental.controller.validator.Validator;
-import ua.kiev.allexb.carrental.data.dao.CarDAO;
-import ua.kiev.allexb.carrental.data.dao.CarDAOImpl;
-import ua.kiev.allexb.carrental.data.domain.CarDomain;
-import ua.kiev.allexb.carrental.model.Car;
+import ua.kiev.allexb.carrental.data.dao.AdministratorDAO;
+import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
+import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
+import ua.kiev.allexb.carrental.model.Administrator;
 import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
@@ -22,48 +22,47 @@ import java.sql.SQLException;
 
 /**
  * @author allexb
- * @version 1.0 29.08.2016
+ * @version 1.0 19.09.2016
  */
-@WebServlet(urlPatterns = {"/car_list/create"})
-public class CreateCarServlet extends HttpServlet {
-    static final Logger logger = ApplicationLogger.getLogger(CreateCarServlet.class);
+@WebServlet(urlPatterns = {"/admin_list/create"})
+public class CreateAdministratorServlet extends HttpServlet {
+    private static final long serialVersionUID = -7531444911729831583L;
+    static final Logger logger = ApplicationLogger.getLogger(CreateAdministratorServlet.class);
 
-    private static final long serialVersionUID = -2881754246718776443L;
-
-    public CreateCarServlet() {
+    public CreateAdministratorServlet() {
         super();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.info("Car creating form.");
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createCarView.jsp");
+        logger.info("Administrator creating form.");
+        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createAdministratorView.jsp");
         dispatcher.forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.info("Car creation procedure started.");
+        logger.info("Administrator creation procedure started.");
         StringBuffer errorString = new StringBuffer();
         ModelExtractor extractor = new ModelExtractor(request);
-        Car car = extractor.getCar();
-        if (car != null) {
-            Validator<Car> validator = new CarValidator(car);
+        Administrator administrator = extractor.getAdministrator();
+        if (administrator != null) {
+            Validator<Administrator> validator = new AdministratorValidator(administrator);
             if (validator.isValid()) {
                 Connection connection = StoreAndCookieUtil.getStoredConnection(request);
                 try {
-                    CarDAO carDAO = new CarDAOImpl(connection);
-                    CarDomain controlCar = carDAO.getByNumberPlate(car.getNumberPlate());
-                    if (controlCar == null) {
-                        logger.info("Car data entered correctly.");
-                        carDAO.add(new CarDomain(car));
-                        response.sendRedirect(request.getContextPath() + "/car_list");
+                    AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+                    AdministratorDomain controlAdministrator = administratorDAO.getByLogin(administrator.getLogin());
+                    if (controlAdministrator == null) {
+                        logger.info("Administrator data entered correctly.");
+                        administratorDAO.add(new AdministratorDomain(administrator));
+                        response.sendRedirect(request.getContextPath() + "/admin_list");
                         return;
                     } else {
-                        errorString.append("Car with number plate \"");
-                        errorString.append(car.getNumberPlate());
+                        errorString.append("Administrator with login \"");
+                        errorString.append(administrator.getLogin());
                         errorString.append("\" already exists. It's ID: #");
-                        errorString.append(controlCar.getId());
+                        errorString.append(controlAdministrator.getId());
                         errorString.append(".\n");
                     }
                 } catch (SQLException ex) {
@@ -74,7 +73,7 @@ public class CreateCarServlet extends HttpServlet {
                 }
             }
             errorString.append(validator.getErrorMessage());
-            request.setAttribute("car", car);
+            request.setAttribute("administrator", administrator);
         } else {
             errorString.append("Sorry, try to fill and submit form again. ");
             request.setAttribute("errorString", errorString.toString());
@@ -82,7 +81,7 @@ public class CreateCarServlet extends HttpServlet {
             return;
         }
         request.setAttribute("errorString", errorString.toString());
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createCarView.jsp");
+        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createAdministratorView.jsp");
         dispatcher.forward(request, response);
     }
 }

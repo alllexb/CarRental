@@ -6,10 +6,7 @@ import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.data.service.DataBaseUtil;
 import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,16 +98,20 @@ public class AdministratorDAOImpl implements AdministratorDAO {
         return administrators.isEmpty() ? null : administrators.get(0);
     }
 
-    private void dataChangeQuery(String query) throws SQLException {
+    private void dataChangeQuery(String query, AdministratorDomain administrator) throws SQLException {
+        if (connection == null) throw new SQLException("No connection to database.");
+        statement = connection.prepareStatement(query);
         try {
-            if (connection == null) throw new SQLException("No connection to database.");
-            statement = connection.createStatement();
-            int items = statement.executeUpdate(query);
+            ((PreparedStatement)statement).setString(1, administrator.getFirstName());
+            ((PreparedStatement)statement).setString(2, administrator.getLastName());
+            ((PreparedStatement)statement).setString(3, administrator.getEmail());
+            ((PreparedStatement)statement).setString(4, administrator.getPassword());
+            int items = ((PreparedStatement)statement).executeUpdate();
             if (items == 0) logger.info("No entities changed.");
         } catch (Exception ex) {
             logger.info("Fail in data base changing.", ex);
             throw new SQLException(ex);
-        } finally {
+        }finally {
             DataBaseUtil.closeStatement(statement);
         }
         logger.info("Add or change data query occurred.");
@@ -119,35 +120,25 @@ public class AdministratorDAOImpl implements AdministratorDAO {
     @Override
     public void add(AdministratorDomain administrator) throws SQLException {
         String query = "INSERT INTO administrator_tb(first_name, last_name, email, login, password) " +
-                "SELECT * FROM (SELECT '" + administrator.getFirstName() + "', '" + administrator.getLastName() + "', '" +
-                administrator.getEmail() + "', '" + administrator.getLogin() + "', '" +
-                administrator.getPassword() + "') AS temp " +
-                "WHERE NOT EXISTS(SELECT id FROM administrator_tb WHERE " +
-                "login='" + administrator.getLogin() + "') LIMIT 1";
-        this.dataChangeQuery(query);
+                "SELECT * FROM (SELECT ?, ?, ?, '" + administrator.getLogin() + "', ?) AS temp " +
+                "WHERE NOT EXISTS(SELECT id FROM administrator_tb WHERE login='" + administrator.getLogin() + "') LIMIT 1";
+        this.dataChangeQuery(query, administrator);
     }
 
     @Override
     public void update(AdministratorDomain administrator) throws SQLException {
         String query = "UPDATE administrator_tb SET " +
-                "first_name='" + administrator.getFirstName() + "', " +
-                "last_name='" + administrator.getLastName() + "', " +
-                "email='" + administrator.getEmail() + "', " +
-                "login='" + administrator.getLogin() + "', " +
-                "password='" + administrator.getPassword() + "' WHERE id=" + administrator.getId() + " AND login='" +
-                administrator.getLogin() + "'";
-        this.dataChangeQuery(query);
+                "first_name=?, last_name=?, email=?, login='" + administrator.getLogin() + "', " +
+                "password=? WHERE id=" + administrator.getId() + " AND login='" + administrator.getLogin() + "'";
+        this.dataChangeQuery(query, administrator);
     }
 
     @Override
     public void remove(AdministratorDomain administrator) throws SQLException {
         String query = "DELETE FROM administrator_tb WHERE id=" + administrator.getId() + " AND " +
-                "first_name='" + administrator.getFirstName() + "' AND " +
-                "last_name='" + administrator.getLastName() + "' AND " +
-                "email='" + administrator.getEmail() + "' AND " +
-                "login='" + administrator.getLogin() + "' AND " +
-                "password='" + administrator.getPassword() + "'";
-        this.dataChangeQuery(query);
+                "first_name=? AND last_name=? AND email=? AND login='" + administrator.getLogin() + "' AND " +
+                "password=?";
+        this.dataChangeQuery(query, administrator);
     }
 
 }

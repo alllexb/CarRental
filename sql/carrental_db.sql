@@ -16,9 +16,9 @@ CREATE TABLE `car_tb` (`id` BIGINT(10) NOT NULL AUTO_INCREMENT,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `client_tb` (`id` BIGINT(10) NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(50) NOT NULL,
-  `last_name` VARCHAR(50) NOT NULL,
-  `birthday` DATE NOT NULL,
+  `first_name` VARCHAR(50),
+  `last_name` VARCHAR(50),
+  `birthday` DATE,
   `dl_number` INTEGER(10) NOT NULL,
   `length_of_driving_experience` INTEGER(3),
   PRIMARY KEY (`id`)
@@ -57,4 +57,5 @@ INSERT INTO administrator_tb(first_name, last_name, email, login, password) VALU
 
 SELECT * FROM `car_tb`;
 SELECT id, first_name, last_name, DATE_FORMAT(birthday, '%d-%m-%Y'), dl_number, length_of_driving_experience FROM `client_tb`;
+SELECT * FROM `client_tb`;
 SELECT * FROM `administrator_tb`;

@@ -97,4 +97,20 @@ public class Client {
                 ", lengthOfDrivingExperience=" + lengthOfDrivingExperience +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Client client = (Client) o;
+
+        if (id != client.id) return false;
+        if (dLNumber != client.dLNumber) return false;
+        if (lengthOfDrivingExperience != client.lengthOfDrivingExperience) return false;
+        if (firstName != null ? !firstName.equals(client.firstName) : client.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(client.lastName) : client.lastName != null) return false;
+        return !(birthday != null ? !birthday.equals(client.birthday) : client.birthday != null);
+
+    }
 }

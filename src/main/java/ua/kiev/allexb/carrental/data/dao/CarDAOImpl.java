@@ -6,10 +6,7 @@ import ua.kiev.allexb.carrental.data.service.DataBaseUtil;
 import ua.kiev.allexb.carrental.model.Car;
 import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,11 +84,18 @@ public class CarDAOImpl implements CarDAO {
         return cars.isEmpty() ? null : cars.get(0);
     }
 
-    private void dataChangeQuery(String query) throws SQLException {
+    private void dataChangeQuery(String query, CarDomain car) throws SQLException {
+        if (connection == null) throw new SQLException("No connection to database.");
+        statement = connection.prepareStatement(query);
         try {
-            if (connection == null) throw new SQLException("No connection to database.");
-            statement = connection.createStatement();
-            int items = statement.executeUpdate(query);
+            ((PreparedStatement)statement).setString(1, car.getNumberPlate());
+            ((PreparedStatement)statement).setString(2, car.getModel());
+            ((PreparedStatement)statement).setString(3, car.getColor().name());
+            ((PreparedStatement)statement).setString(4, car.getDescription());
+            ((PreparedStatement)statement).setInt(5, car.getYearOfManufacture());
+            ((PreparedStatement)statement).setBigDecimal(6, car.getRentalPrice());
+            ((PreparedStatement)statement).setBoolean(7, car.isRented());
+            int items = ((PreparedStatement)statement).executeUpdate();
             if (items == 0) logger.info("No entities changed.");
         } catch (Exception ex) {
             logger.info("Fail in data base changing.", ex);
@@ -104,32 +108,21 @@ public class CarDAOImpl implements CarDAO {
 
     public void add(CarDomain car) throws SQLException {
         String query = "INSERT INTO car_tb(number_plate, model, color, description, year_of_manufacture, rental_price, rented)" +
-                " VALUES ('" + car.getNumberPlate() + "', '" + car.getModel() + "', '" + car.getColor() + "', '" + car.getDescription() +
-                "', " + car.getYearOfManufacture() + ", " + car.getRentalPrice() + ", " + car.isRented() + ")";
-        this.dataChangeQuery(query);
+                " VALUES (?, ?, ?, ?, ?, ?, ?)";
+        this.dataChangeQuery(query, car);
     }
 
     public void update(CarDomain car) throws SQLException {
         String query = "UPDATE car_tb SET " +
-                "number_plate='" + car.getNumberPlate() + "', " +
-                "model='" + car.getModel() + "', " +
-                "color='" + car.getColor() + "', " +
-                "description='" + car.getDescription() + "', " +
-                "year_of_manufacture=" + car.getYearOfManufacture() + ", " +
-                "rental_price=" + car.getRentalPrice() + ", " +
-                "rented=" + car.isRented() + " WHERE id=" + car.getId();
-        this.dataChangeQuery(query);
+                "number_plate=?, model=?, color=?, description=?, year_of_manufacture=?, rental_price=?, rented=? " +
+                "WHERE id=" + car.getId();
+        this.dataChangeQuery(query, car);
     }
 
     public void remove(CarDomain car) throws SQLException {
-        String query = "DELETE FROM car_tb WHERE id=" + car.getId() + " AND " +
-                "number_plate='" + car.getNumberPlate() +  "' AND " +
-                "model='" + car.getModel() + "' AND " +
-                "color='" + car.getColor() + "' AND " +
-                "description='" + car.getDescription() + "' AND " +
-                "year_of_manufacture=" + car.getYearOfManufacture() + " AND " +
-                "rental_price=" + car.getRentalPrice() + " AND " +
-                "rented=" + car.isRented();
-        this.dataChangeQuery(query);
+        String query = "DELETE FROM car_tb WHERE id=" + car.getId() + " AND  number_plate=? AND " +
+                "model=? AND color=? AND description=? AND year_of_manufacture=? AND rental_price=? AND " +
+                "rented=?";
+        this.dataChangeQuery(query, car);
     }
 }

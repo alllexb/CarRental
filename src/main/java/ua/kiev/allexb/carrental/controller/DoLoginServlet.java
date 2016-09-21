@@ -50,8 +50,15 @@ public class DoLoginServlet extends HttpServlet {
 
         if (login == null || password == null
                 || login.length() == 0 || password.length() == 0) {
-            hasError = true;
-            errorString = "Required login and password!";
+            // If user try to call "/doLogin" servlet directly, redirection to "/home"
+            String header = request.getHeader("Referer");
+            if (header == null || header.endsWith("/doLogin")) {
+                response.sendRedirect(request.getContextPath() + "/home");
+                return;
+            } else {
+                hasError = true;
+                errorString = "Required login and password!";
+            }
         } else {
             Connection connection = StoreAndCookieUtil.getStoredConnection(request);
             try {
@@ -108,7 +115,7 @@ public class DoLoginServlet extends HttpServlet {
             // Redirect to last visited page or home.
             logger.info("Administrator logined correctly.");
             String header = request.getHeader("Referer");
-            if (header.endsWith("/login") || header.endsWith("/logout")) {
+            if (header.endsWith("/login") || header.endsWith("/logout") || header.endsWith("/doLogin")) {
                 response.sendRedirect(request.getContextPath() + "/home");
             } else {
                 response.sendRedirect(header);

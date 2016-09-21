@@ -48,7 +48,7 @@ public class DeleteCarServlet extends HttpServlet {
                 RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/deleteCarView.jsp");
                 dispatcher.forward(request, response);
             } else {
-                request.setAttribute("errorString", "Car with ID:" + id + "does not exists.");
+                request.setAttribute("errorString", "Car with ID: #" + id + " does not exists.");
                 RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/car_list");
                 dispatcher.forward(request, response);
             }
@@ -77,7 +77,7 @@ public class DeleteCarServlet extends HttpServlet {
                     carDAO.remove(controlCar);
                     logger.info("Car deleted.");
                 } else {
-                    String errorString = "Car with with ID:# " + id + " doesn't exist.";
+                    String errorString = "Car with with ID: #" + id + " doesn't exist.";
                     request.setAttribute("errorString", errorString);
                     RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/car_list");
                     dispatcher.forward(request, response);

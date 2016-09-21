@@ -1,12 +1,12 @@
 package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
-import ua.kiev.allexb.carrental.controller.validator.CarValidator;
+import ua.kiev.allexb.carrental.controller.validator.ClientValidator;
 import ua.kiev.allexb.carrental.controller.validator.Validator;
-import ua.kiev.allexb.carrental.data.dao.CarDAO;
-import ua.kiev.allexb.carrental.data.dao.CarDAOImpl;
-import ua.kiev.allexb.carrental.data.domain.CarDomain;
-import ua.kiev.allexb.carrental.model.Car;
+import ua.kiev.allexb.carrental.data.dao.ClientDAO;
+import ua.kiev.allexb.carrental.data.dao.ClientDAOImpl;
+import ua.kiev.allexb.carrental.data.domain.ClientDomain;
+import ua.kiev.allexb.carrental.model.Client;
 import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
@@ -22,48 +22,48 @@ import java.sql.SQLException;
 
 /**
  * @author allexb
- * @version 1.0 29.08.2016
+ * @version 1.0 16.09.2016
  */
-@WebServlet(urlPatterns = {"/car_list/create"})
-public class CreateCarServlet extends HttpServlet {
-    static final Logger logger = ApplicationLogger.getLogger(CreateCarServlet.class);
+@WebServlet(urlPatterns = {"/client_list/create"})
+public class CreateClientServlet extends HttpServlet {
+    static final Logger logger = ApplicationLogger.getLogger(CreateClientServlet.class);
 
-    private static final long serialVersionUID = -2881754246718776443L;
+    private static final long serialVersionUID = 770031007379483882L;
 
-    public CreateCarServlet() {
+    public CreateClientServlet() {
         super();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.info("Car creating form.");
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createCarView.jsp");
+        logger.info("Client creating form.");
+        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createClientView.jsp");
         dispatcher.forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.info("Car creation procedure started.");
+        logger.info("Client creation procedure started.");
         StringBuffer errorString = new StringBuffer();
         ModelExtractor extractor = new ModelExtractor(request);
-        Car car = extractor.getCar();
-        if (car != null) {
-            Validator<Car> validator = new CarValidator(car);
+        Client client = extractor.getClient();
+        if (client != null) {
+            Validator<Client> validator = new ClientValidator(client);
             if (validator.isValid()) {
                 Connection connection = StoreAndCookieUtil.getStoredConnection(request);
                 try {
-                    CarDAO carDAO = new CarDAOImpl(connection);
-                    CarDomain controlCar = carDAO.getByNumberPlate(car.getNumberPlate());
-                    if (controlCar == null) {
-                        logger.info("Car data entered correctly.");
-                        carDAO.add(new CarDomain(car));
-                        response.sendRedirect(request.getContextPath() + "/car_list");
+                    ClientDAO clientDAO = new ClientDAOImpl(connection);
+                    ClientDomain controlClient = clientDAO.getByDLNumber(client.getdLNumber());
+                    if (controlClient == null) {
+                        logger.info("Client data entered correctly.");
+                        clientDAO.add(new ClientDomain(client));
+                        response.sendRedirect(request.getContextPath() + "/client_list");
                         return;
                     } else {
-                        errorString.append("Car with number plate \"");
-                        errorString.append(car.getNumberPlate());
+                        errorString.append("Client with driver's license number \"");
+                        errorString.append(client.getdLNumber());
                         errorString.append("\" already exists. It's ID: #");
-                        errorString.append(controlCar.getId());
+                        errorString.append(controlClient.getId());
                         errorString.append(".\n");
                     }
                 } catch (SQLException ex) {
@@ -74,7 +74,7 @@ public class CreateCarServlet extends HttpServlet {
                 }
             }
             errorString.append(validator.getErrorMessage());
-            request.setAttribute("car", car);
+            request.setAttribute("client", client);
         } else {
             errorString.append("Sorry, try to fill and submit form again. ");
             request.setAttribute("errorString", errorString.toString());
@@ -82,7 +82,7 @@ public class CreateCarServlet extends HttpServlet {
             return;
         }
         request.setAttribute("errorString", errorString.toString());
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createCarView.jsp");
+        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createClientView.jsp");
         dispatcher.forward(request, response);
     }
 }

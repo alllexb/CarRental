@@ -1,12 +1,12 @@
 package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
-import ua.kiev.allexb.carrental.controller.validator.CarValidator;
+import ua.kiev.allexb.carrental.controller.validator.ClientValidator;
 import ua.kiev.allexb.carrental.controller.validator.Validator;
-import ua.kiev.allexb.carrental.data.dao.CarDAO;
-import ua.kiev.allexb.carrental.data.dao.CarDAOImpl;
-import ua.kiev.allexb.carrental.data.domain.CarDomain;
-import ua.kiev.allexb.carrental.model.Car;
+import ua.kiev.allexb.carrental.data.dao.ClientDAO;
+import ua.kiev.allexb.carrental.data.dao.ClientDAOImpl;
+import ua.kiev.allexb.carrental.data.domain.ClientDomain;
+import ua.kiev.allexb.carrental.model.Client;
 import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
@@ -22,38 +22,38 @@ import java.sql.SQLException;
 
 /**
  * @author allexb
- * @version 1.0 01.09.2016
+ * @version 1.0 19.09.2016
  */
-@WebServlet(urlPatterns = {"/car_list/edit"})
-public class EditCarServlet extends HttpServlet {
-    static final Logger logger = ApplicationLogger.getLogger(EditCarServlet.class);
+@WebServlet(urlPatterns = {"/client_list/edit"})
+public class EditClientServlet extends HttpServlet{
+    static final Logger logger = ApplicationLogger.getLogger(EditClientServlet.class);
 
-    private static final long serialVersionUID = -6669657844128409978L;
+    private static final long serialVersionUID = 1677082379241851943L;
 
-    public EditCarServlet() {
+    public EditClientServlet() {
         super();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.info("Car editing form.");
+        logger.info("Client editing form.");
         if (request.getParameter("id") == null || request.getParameter("id").isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/car_list");
+            response.sendRedirect(request.getContextPath() + "/client_list");
             return;
         }
         long id = Long.valueOf(request.getParameter("id"));
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            CarDAO carDAO = new CarDAOImpl(connection);
-            CarDomain car = carDAO.getById(id);
-            if (car != null) {
-                logger.info("Car data entered correctly.");
-                request.setAttribute("car", car.getCar());
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/editCarView.jsp");
+            ClientDAO clientDAO = new ClientDAOImpl(connection);
+            ClientDomain client = clientDAO.getById(id);
+            if (client != null) {
+                logger.info("Client data entered correctly.");
+                request.setAttribute("client", client.getClient());
+                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/editClientView.jsp");
                 dispatcher.forward(request, response);
             } else {
-                request.setAttribute("errorString", "Car with ID: #" + id + " does not exists.");
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/car_list");
+                request.setAttribute("errorString", "Client with ID: #" + id + " does not exists.");
+                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/client_list");
                 dispatcher.forward(request, response);
             }
         } catch (SQLException ex) {
@@ -66,32 +66,32 @@ public class EditCarServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.info("Car updating procedure started.");
+        logger.info("Client updating procedure started.");
         StringBuffer errorString = new StringBuffer();
         if (request.getParameter("id") == null || request.getParameter("id").isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/car_list");
+            response.sendRedirect(request.getContextPath() + "/client_list");
             return;
         }
         ModelExtractor extractor = new ModelExtractor(request);
-        Car car = extractor.getCar();
-        if (car != null) {
-            car.setId(Long.valueOf(request.getParameter("id")));
-            Validator<Car> validator = new CarValidator(car);
+        Client client = extractor.getClient();
+        if (client != null) {
+            client.setId(Long.valueOf(request.getParameter("id")));
+            Validator<Client> validator = new ClientValidator(client);
             if (validator.isValid()) {
                 Connection connection = StoreAndCookieUtil.getStoredConnection(request);
                 try {
-                    CarDAO carDAO = new CarDAOImpl(connection);
-                    CarDomain controlCar = carDAO.getByNumberPlate(car.getNumberPlate());
-                    if (controlCar == null || controlCar.getId() == car.getId()) {
-                        logger.info("Car data entered correctly.");
-                        carDAO.update(new CarDomain(car));
-                        response.sendRedirect(request.getContextPath() + "/car_list");
+                    ClientDAO clientDAO = new ClientDAOImpl(connection);
+                    ClientDomain controlClient = clientDAO.getByDLNumber(client.getdLNumber());
+                    if (controlClient == null || controlClient.getId() == client.getId()) {
+                        logger.info("Client data entered correctly.");
+                        clientDAO.update(new ClientDomain(client));
+                        response.sendRedirect(request.getContextPath() + "/client_list");
                         return;
                     } else {
-                        errorString.append("Car with number plate \"");
-                        errorString.append(car.getNumberPlate());
+                        errorString.append("Client with driver's license number \"");
+                        errorString.append(client.getdLNumber());
                         errorString.append("\" already exists. It's ID: #");
-                        errorString.append(controlCar.getId());
+                        errorString.append(controlClient.getId());
                         errorString.append(".\n");
                     }
                 } catch (SQLException ex) {
@@ -102,7 +102,7 @@ public class EditCarServlet extends HttpServlet {
                 }
             }
             errorString.append(validator.getErrorMessage());
-            request.setAttribute("car", car);
+            request.setAttribute("client", client);
         } else {
             errorString.append("Sorry, try to fill and submit form again. ");
             request.setAttribute("errorString", errorString.toString());
@@ -110,7 +110,7 @@ public class EditCarServlet extends HttpServlet {
             return;
         }
         request.setAttribute("errorString", errorString.toString());
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/editCarView.jsp");
+        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/editClientView.jsp");
         dispatcher.forward(request, response);
     }
 }

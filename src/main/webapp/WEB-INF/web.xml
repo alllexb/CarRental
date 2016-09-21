@@ -8,6 +8,13 @@
 
     <display-name>CarRentalService</display-name>
 
+    <jsp-config>
+        <taglib>
+            <taglib-uri>http://allexb.kiev.ua/jsp/tlds/viewtags</taglib-uri>
+            <taglib-location>/WEB-INF/tlds/viewtags.tld</taglib-location>
+        </taglib>
+    </jsp-config>
+
     <filter-mapping>
         <filter-name>jdbcFilter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -27,6 +34,12 @@
         <url-pattern>/car_list/create</url-pattern>
         <url-pattern>/car_list/edit</url-pattern>
         <url-pattern>/car_list/delete</url-pattern>
+        <url-pattern>/client_list/create</url-pattern>
+        <url-pattern>/client_list/edit</url-pattern>
+        <url-pattern>/client_list/delete</url-pattern>
+        <url-pattern>/admin_list/create</url-pattern>
+        <url-pattern>/admin_list/edit</url-pattern>
+        <url-pattern>/admin_list/delete</url-pattern>
     </filter-mapping>
 
     <!-- error-code related error pages -->
@@ -52,6 +65,7 @@
         <location>/errorHandler</location>
     </error-page>
 
+    <!-- welcome pages-->
     <welcome-file-list>
         <welcome-file>/</welcome-file>
         <welcome-file>home</welcome-file>
