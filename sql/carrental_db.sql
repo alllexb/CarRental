@@ -25,8 +25,8 @@ CREATE TABLE `client_tb` (`id` BIGINT(10) NOT NULL AUTO_INCREMENT,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `administrator_tb` (`id` BIGINT(10) NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(50) NOT NULL,
-  `last_name` VARCHAR(50) NOT NULL,
+  `first_name` VARCHAR(50),
+  `last_name` VARCHAR(50),
   `email` VARCHAR(50) NOT NULL,
   `login` VARCHAR(50) NOT NULL,
   `password` VARCHAR(64) NOT NULL,
@@ -53,7 +53,9 @@ INSERT INTO client_tb(first_name, last_name, birthday, dl_number, length_of_driv
 INSERT INTO administrator_tb(first_name, last_name, email, login, password) VALUES
 ('Bill', 'Jones', 'bj@carrental.com', 'admin-bj', 'ed5ba9153c1d2b3231aa43302b50a377'), -- password = bj1212!
 ('Eric', 'Gley', 'eg@carrental.com', 'admin-eg', 'fc5007160370fd6953a37e228c99e162'), -- password = $eric34+
-('Amanda', 'Drims', 'ad@carrental.com', 'admin-ad', '086f3e957e828670d9fc24e51171eb82'); -- password = mandy#12!d
+('Amanda', 'Drims', 'ad@carrental.com', 'admin-ad', '086f3e957e828670d9fc24e51171eb82'), -- password = mandy#12!d
+('admin', 'admin', 'admin@admin.ad', 'admin', '21232f297a57a5a743894a0e4a801fc3'), -- password = admin
+('as', 'as', 'as@as.as', 'as', 'f970e2767d0cfe75876ea857f92e319b'); -- password = as
 
 SELECT * FROM `car_tb`;
 SELECT id, first_name, last_name, DATE_FORMAT(birthday, '%d-%m-%Y'), dl_number, length_of_driving_experience FROM `client_tb`;

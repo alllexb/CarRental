@@ -119,9 +119,11 @@ public class AdministratorDAOImpl implements AdministratorDAO {
 
     @Override
     public void add(AdministratorDomain administrator) throws SQLException {
+//        String query = "INSERT INTO administrator_tb(first_name, last_name, email, login, password) " +
+//                "SELECT * FROM (SELECT ?, ?, ?, '" + administrator.getLogin() + "', ?) AS temp " +
+//                "WHERE NOT EXISTS(SELECT id FROM administrator_tb WHERE login='" + administrator.getLogin() + "') LIMIT 1";
         String query = "INSERT INTO administrator_tb(first_name, last_name, email, login, password) " +
-                "SELECT * FROM (SELECT ?, ?, ?, '" + administrator.getLogin() + "', ?) AS temp " +
-                "WHERE NOT EXISTS(SELECT id FROM administrator_tb WHERE login='" + administrator.getLogin() + "') LIMIT 1";
+                "VALUES (?, ?, ?, '" + administrator.getLogin() + "', ?)";
         this.dataChangeQuery(query, administrator);
     }
 
