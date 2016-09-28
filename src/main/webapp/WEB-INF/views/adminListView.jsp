@@ -12,7 +12,7 @@
 <jsp:include page="_menu.jsp"/>
 <div class="headline"><h3>Administrator List</h3></div>
 <c:if test="${errorString != null}"><p class="error">${errorString}</p></c:if>
-<div class="right"><a class="button-link" href="${pageContext.request.contextPath}/admin_list/create" >Create Administrator</a></div>
+<div class="right"><a class="button-link" href="${pageContext.request.contextPath}/admin_list/create">Create Administrator</a></div>
 <table cellpadding="0" class="print_table">
   <thead>
   <tr>
@@ -30,7 +30,7 @@
   <%! Integer counter = 0; %>
   <c:forEach items="${administratorList}" var="administrator">
     <% if (counter%2 == 0) {%><tr class = "even"><%} else {%><tr><%}%>
-    <td>${administrator.id}</td>
+    <td><a href="${pageContext.request.contextPath}/admin_list/display?id=${administrator.id}">${administrator.id}</a></td>
     <td>${administrator.login}</td>
     <td>${administrator.firstName}</td>
     <td>${administrator.lastName}</td>

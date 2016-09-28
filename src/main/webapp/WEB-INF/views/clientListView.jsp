@@ -14,7 +14,7 @@
 
 <div class="headline"><h3>Client List</h3></div>
 <c:if test="${errorString != null}"><p class="error">${errorString}</p></c:if>
-<div class="right"><a class="button-link" href="${pageContext.request.contextPath}/client_list/create" >Create Client</a></div>
+<div class="right"><a class="button-link" href="${pageContext.request.contextPath}/client_list/create">Create Client</a></div>
 <table cellpadding="0" class="print_table">
   <thead>
   <tr>
@@ -32,7 +32,7 @@
   <%! Integer counter = 0; %>
   <c:forEach items="${clientList}" var="client">
     <% if (counter%2 == 0) { %><tr class="even"><%} else {%><tr><%}%>
-    <td>${client.id}</td>
+    <td><a href="${pageContext.request.contextPath}/client_list/display?id=${client.id}">${client.id}</a></td>
     <td>${client.firstName}</td>
     <td>${client.lastName}</td>
     <td>${client.birthday}</td>
@@ -45,7 +45,7 @@
   </c:forEach>
   </tbody>
 </table>
-<p/><div class="right"><a class="button-link" href="${pageContext.request.contextPath}/car_list/create" >Create Client</a></div><p/>
+<p/><div class="right"><a class="button-link" href="${pageContext.request.contextPath}/client_list/create">Create Client</a></div><p/>
 <jsp:include page="_footer.jsp"/>
 
 </body>

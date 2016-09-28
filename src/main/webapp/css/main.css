@@ -36,6 +36,10 @@ h1.title{
     text-align: right;
 }
 
+.tab {
+    margin-left: 45px;
+}
+
 #main_menu {
     /*border-top: 1px solid #0A5A55;*/
 }

@@ -15,12 +15,12 @@ public class Car {
     private String description;
     private int yearOfManufacture;
     private BigDecimal rentalPrice;
-    private boolean rented;
+    private Status status;
 
     public Car() {
     }
 
-    public Car(long id, String numberPlate, String model, Color color, String description, int yearOfManufacture, BigDecimal rentalPrice, boolean rented) {
+    public Car(long id, String numberPlate, String model, Color color, String description, int yearOfManufacture, BigDecimal rentalPrice, Status status) {
         this.id = id;
         this.numberPlate = numberPlate;
         this.model = model;
@@ -28,7 +28,7 @@ public class Car {
         this.description = description;
         this.yearOfManufacture = yearOfManufacture;
         this.rentalPrice = rentalPrice;
-        this.rented = rented;
+        this.status = status;
     }
 
     public long getId() {
@@ -87,12 +87,12 @@ public class Car {
         this.rentalPrice = rentalPrice;
     }
 
-    public boolean isRented() {
-        return rented;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setRented(boolean rented) {
-        this.rented = rented;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Override
@@ -104,12 +104,13 @@ public class Car {
 
         if (id != car.id) return false;
         if (yearOfManufacture != car.yearOfManufacture) return false;
-        if (rented != car.rented) return false;
         if (!numberPlate.equals(car.numberPlate)) return false;
         if (model != null ? !model.equals(car.model) : car.model != null) return false;
         if (color != car.color) return false;
         if (description != null ? !description.equals(car.description) : car.description != null) return false;
-        return !(rentalPrice != null ? !rentalPrice.equals(car.rentalPrice) : car.rentalPrice != null);
+        if (!rentalPrice.equals(car.rentalPrice)) return false;
+        return status == car.status;
+
     }
 
     @Override
@@ -117,11 +118,11 @@ public class Car {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + numberPlate.hashCode();
         result = 31 * result + (model != null ? model.hashCode() : 0);
-        result = 31 * result + (color != null ? color.hashCode() : 0);
+        result = 31 * result + color.hashCode();
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + yearOfManufacture;
-        result = 31 * result + (rentalPrice != null ? rentalPrice.hashCode() : 0);
-        result = 31 * result + (rented ? 1 : 0);
+        result = 31 * result + rentalPrice.hashCode();
+        result = 31 * result + status.hashCode();
         return result;
     }
 
@@ -135,9 +136,10 @@ public class Car {
                 ", description='" + description + '\'' +
                 ", yearOfManufacture=" + yearOfManufacture +
                 ", rentalPrice=" + rentalPrice +
-                ", rented=" + rented +
+                ", status=" + status +
                 '}';
     }
 
     public enum Color {NAN, WHITE, BLACK, GREY, RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE, PINK, BROWN, GOLD, SILVER, BRONZE}
+    public enum Status {UNIDENTIFIED, AVAILABLE, RESERVED, RENTED, ON_REPAIR, DECOMMISSIONED}
 }

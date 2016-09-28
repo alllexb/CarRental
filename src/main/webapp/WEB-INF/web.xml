@@ -31,15 +31,22 @@
         <url-pattern>/adminInfo</url-pattern>
         <url-pattern>/admin_list</url-pattern>
         <url-pattern>/client_list</url-pattern>
+        <url-pattern>/order_list</url-pattern>
         <url-pattern>/car_list/create</url-pattern>
         <url-pattern>/car_list/edit</url-pattern>
         <url-pattern>/car_list/delete</url-pattern>
+        <url-pattern>/client_list/display</url-pattern>
         <url-pattern>/client_list/create</url-pattern>
         <url-pattern>/client_list/edit</url-pattern>
         <url-pattern>/client_list/delete</url-pattern>
+        <url-pattern>/admin_list/display</url-pattern>
         <url-pattern>/admin_list/create</url-pattern>
         <url-pattern>/admin_list/edit</url-pattern>
         <url-pattern>/admin_list/delete</url-pattern>
+        <url-pattern>/order_list/display</url-pattern>
+        <url-pattern>/order_list/create</url-pattern>
+        <url-pattern>/order_list/edit</url-pattern>
+        <url-pattern>/order_list/delete</url-pattern>
     </filter-mapping>
 
     <!-- error-code related error pages -->

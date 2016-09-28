@@ -19,7 +19,6 @@ public class CarDAOImpl implements CarDAO {
     static final Logger logger = ApplicationLogger.getLogger(CarDAO.class);
 
     private Connection connection;
-    private Statement statement;
 
     public CarDAOImpl() {
     }
@@ -32,15 +31,14 @@ public class CarDAOImpl implements CarDAO {
         this.connection = connection;
     }
 
-    private List<CarDomain> getItems(String query, int amount) throws SQLException {
+    private List<CarDomain> getItems(PreparedStatement statement) throws SQLException {
         ResultSet resultSet = null;
         List<CarDomain> cars = new ArrayList<>();
         try {
             if (connection == null) throw new SQLException("No connection to database.");
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(query);
+            resultSet = statement.executeQuery();
             if (resultSet != null) {
-                for (int i = 0; i < amount & resultSet.next(); i++) {
+                while (resultSet.next()) {
                     CarDomain car = new CarDomain(resultSet.getLong("id"),
                             resultSet.getString("number_plate"),
                             resultSet.getString("model"),
@@ -48,7 +46,7 @@ public class CarDAOImpl implements CarDAO {
                             resultSet.getString("description"),
                             resultSet.getInt("year_of_manufacture"),
                             resultSet.getBigDecimal("rental_price"),
-                            resultSet.getBoolean("rented"));
+                            Car.Status.valueOf(resultSet.getString("status") == null ? "UNIDENTIFIED" : resultSet.getString("status")));
                     cars.add(car);
                 }
             }
@@ -61,41 +59,40 @@ public class CarDAOImpl implements CarDAO {
     }
 
     public CarDomain getByModel(String model) throws SQLException {
-        String query = "SELECT * FROM car_tb WHERE model='" + model + "'";
-        List<CarDomain> cars = getItems(query, ONE);
+        String query = "SELECT * FROM car_tb WHERE model=?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, model);
+        List<CarDomain> cars = getItems(statement);
         return cars.isEmpty() ? null : cars.get(0);
     }
 
     @Override
     public CarDomain getByNumberPlate(String numberPlate) throws SQLException {
-        String query = "SELECT * FROM car_tb WHERE number_plate='" + numberPlate + "'";
-        List<CarDomain> cars = getItems(query, ONE);
+        String query = "SELECT * FROM car_tb WHERE number_plate=?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, numberPlate);
+        List<CarDomain> cars = getItems(statement);
         return cars.isEmpty() ? null : cars.get(0);
     }
 
     public List<CarDomain> getAll() throws SQLException {
         String query = "SELECT * FROM car_tb";
-        return getItems(query, ALL);
+        PreparedStatement statement = connection.prepareStatement(query);
+        return getItems(statement);
     }
 
     public CarDomain getById(Long id) throws SQLException {
-        String query = "SELECT * FROM car_tb WHERE id=" + id;
-        List<CarDomain> cars = getItems(query, ONE);
+        String query = "SELECT * FROM car_tb WHERE id=?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setLong(1, id);
+        List<CarDomain> cars = getItems(statement);
         return cars.isEmpty() ? null : cars.get(0);
     }
 
-    private void dataChangeQuery(String query, CarDomain car) throws SQLException {
+    private void dataChangeQuery(PreparedStatement statement) throws SQLException {
         if (connection == null) throw new SQLException("No connection to database.");
-        statement = connection.prepareStatement(query);
         try {
-            ((PreparedStatement)statement).setString(1, car.getNumberPlate());
-            ((PreparedStatement)statement).setString(2, car.getModel());
-            ((PreparedStatement)statement).setString(3, car.getColor().name());
-            ((PreparedStatement)statement).setString(4, car.getDescription());
-            ((PreparedStatement)statement).setInt(5, car.getYearOfManufacture());
-            ((PreparedStatement)statement).setBigDecimal(6, car.getRentalPrice());
-            ((PreparedStatement)statement).setBoolean(7, car.isRented());
-            int items = ((PreparedStatement)statement).executeUpdate();
+            int items = statement.executeUpdate();
             if (items == 0) logger.info("No entities changed.");
         } catch (Exception ex) {
             logger.info("Fail in data base changing.", ex);
@@ -107,22 +104,47 @@ public class CarDAOImpl implements CarDAO {
     }
 
     public void add(CarDomain car) throws SQLException {
-        String query = "INSERT INTO car_tb(number_plate, model, color, description, year_of_manufacture, rental_price, rented)" +
+        String query = "INSERT INTO car_tb(number_plate, model, color, description, year_of_manufacture, rental_price, status)" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?)";
-        this.dataChangeQuery(query, car);
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, car.getNumberPlate());
+        statement.setString(2, car.getModel());
+        statement.setString(3, car.getColor().name());
+        statement.setString(4, car.getDescription());
+        statement.setInt(5, car.getYearOfManufacture());
+        statement.setBigDecimal(6, car.getRentalPrice());
+        statement.setString(7, car.getStatus().name());
+        this.dataChangeQuery(statement);
     }
 
     public void update(CarDomain car) throws SQLException {
         String query = "UPDATE car_tb SET " +
-                "number_plate=?, model=?, color=?, description=?, year_of_manufacture=?, rental_price=?, rented=? " +
-                "WHERE id=" + car.getId();
-        this.dataChangeQuery(query, car);
+                "number_plate=?, model=?, color=?, description=?, year_of_manufacture=?, rental_price=?, status=?" +
+                "WHERE id=?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, car.getNumberPlate());
+        statement.setString(2, car.getModel());
+        statement.setString(3, car.getColor().name());
+        statement.setString(4, car.getDescription());
+        statement.setInt(5, car.getYearOfManufacture());
+        statement.setBigDecimal(6, car.getRentalPrice());
+        statement.setString(7, car.getStatus().name());
+        statement.setLong(8, car.getId());
+        this.dataChangeQuery(statement);
     }
 
     public void remove(CarDomain car) throws SQLException {
-        String query = "DELETE FROM car_tb WHERE id=" + car.getId() + " AND  number_plate=? AND " +
-                "model=? AND color=? AND description=? AND year_of_manufacture=? AND rental_price=? AND " +
-                "rented=?";
-        this.dataChangeQuery(query, car);
+        String query = "DELETE FROM car_tb WHERE id=? AND  number_plate=? AND " +
+                "model=? AND color=? AND description=? AND year_of_manufacture=? AND rental_price=? AND status=?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setLong(1, car.getId());
+        statement.setString(2, car.getNumberPlate());
+        statement.setString(3, car.getModel());
+        statement.setString(4, car.getColor().name());
+        statement.setString(5, car.getDescription());
+        statement.setInt(6, car.getYearOfManufacture());
+        statement.setBigDecimal(7, car.getRentalPrice());
+        statement.setString(8, car.getStatus().name());
+        this.dataChangeQuery(statement);
     }
 }

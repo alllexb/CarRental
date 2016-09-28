@@ -24,8 +24,8 @@
                 <label for="color">Color:</label><br/><view:enum item="<%=Car.Color.class%>" size="1" name="color" id="color" required="true" current="${car.color}"/><br/>
                 <label for="description">Description:</label><br/><input type="text" name="description" value="${car.description}" id="description"/><br/>
                 <label for="yearOfManufacture">Year of manufacture:</label><br/><input type="number" min="1900" step="1" name="yearOfManufacture" value="${car.yearOfManufacture}" id="yearOfManufacture"/><br/>
-                <label for="rentalPrice">Rental price:</label><br/><input type="number" min="0.00" step="0.01" name="rentalPrice" value="${car.rentalPrice}" id="rentalPrice"/><br/>
-                <label for="rented">Is car already rented:</label><input type="checkbox" name="rented" value="true" id="rented" <c:if test="${car.rented}"> checked="checked" </c:if>/><br/>
+                <label for="rentalPrice">Rental price ($/day):</label><br/><input type="number" min="0.00" step="0.01" name="rentalPrice" value="${car.rentalPrice}" id="rentalPrice"/><br/>
+                <label for="status">Color:</label><br/><view:enum item="<%=Car.Status.class%>" size="1" name="status" id="status" current="${car.status}"/><br/>
             </div>
             <div class="button_box">
                 <input type="submit" value="Edit" id="button" class="button-link"/> <a href="${pageContext.request.contextPath}/car_list" class="button-link">Return to the list</a>

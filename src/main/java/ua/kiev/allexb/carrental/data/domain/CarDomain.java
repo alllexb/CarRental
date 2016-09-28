@@ -16,9 +16,9 @@ public class CarDomain extends AbstractDomain {
     private String description;
     private int yearOfManufacture;
     private BigDecimal rentalPrice;
-    private boolean rented;
+    private Car.Status status;
 
-    public CarDomain(Long id, String numberPlate, String model, Car.Color color, String description, int yearOfManufacture, BigDecimal rentalPrice, boolean rented) {
+    public CarDomain(Long id, String numberPlate, String model, Car.Color color, String description, int yearOfManufacture, BigDecimal rentalPrice, Car.Status status) {
         super(id);
         this.numberPlate = numberPlate;
         this.model = model;
@@ -26,7 +26,7 @@ public class CarDomain extends AbstractDomain {
         this.description = description;
         this.yearOfManufacture = yearOfManufacture;
         this.rentalPrice = rentalPrice;
-        this.rented = rented;
+        this.status = status;
     }
 
     public CarDomain(Car car) {
@@ -38,7 +38,7 @@ public class CarDomain extends AbstractDomain {
 
     public Car getCar() {
         return new Car(this.getId(), this.numberPlate, this.model, this.color, this.description, this.yearOfManufacture,
-                this.rentalPrice, this.rented);
+                this.rentalPrice, this.status);
     }
 
     public void setCar(Car car) {
@@ -49,7 +49,7 @@ public class CarDomain extends AbstractDomain {
         this.description = car.getDescription();
         this.yearOfManufacture = car.getYearOfManufacture();
         this.rentalPrice = car.getRentalPrice();
-        this.rented = car.isRented();
+        this.status = car.getStatus();
     }
 
     public String getNumberPlate() {
@@ -100,11 +100,11 @@ public class CarDomain extends AbstractDomain {
         this.rentalPrice = rentalPrice;
     }
 
-    public boolean isRented() {
-        return rented;
+    public Car.Status getStatus() {
+        return status;
     }
 
-    public void setRented(boolean rented) {
-        this.rented = rented;
+    public void setStatus(Car.Status status) {
+        this.status = status;
     }
 }

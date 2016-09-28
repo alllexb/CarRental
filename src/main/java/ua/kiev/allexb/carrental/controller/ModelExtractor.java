@@ -80,7 +80,13 @@ public class ModelExtractor {
             errorMessage.append("Set correct rental price. ");
             logger.warn(ex);
         }
-        car.setRented(request.getParameter("rented") != null);
+        try {
+            Car.Status status = request.getParameter("status") != null && !request.getParameter("status").isEmpty() ? Car.Status.valueOf(request.getParameter("status")) : Car.Status.UNIDENTIFIED;
+            car.setStatus(status);
+        } catch (IllegalArgumentException ex) {
+            errorMessage.append("Choose correct status. ");
+            logger.warn(ex);
+        }
         logger.info("New car made.");
         return car;
     }
