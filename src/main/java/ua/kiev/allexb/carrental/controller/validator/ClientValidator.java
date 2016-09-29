@@ -1,12 +1,8 @@
 package ua.kiev.allexb.carrental.controller.validator;
 
 import org.apache.log4j.Logger;
-import ua.kiev.allexb.carrental.data.dao.util.DateUtil;
 import ua.kiev.allexb.carrental.model.Client;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
-import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,7 +12,7 @@ import java.util.Date;
  * @version 1.0 17.09.2016
  */
 public class ClientValidator extends Validator<Client> {
-    static final Logger logger = ApplicationLogger.getLogger(ClientValidator.class);
+    static final Logger logger = Logger.getLogger(ClientValidator.class);
 
     public ClientValidator(Client client) {
         super(client);

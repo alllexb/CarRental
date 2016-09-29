@@ -2,7 +2,6 @@ package ua.kiev.allexb.carrental.controller.validator;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.model.Administrator;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +11,9 @@ import java.util.regex.Pattern;
  * @version 1.0 20.09.2016
  */
 public class AdministratorValidator extends Validator<Administrator> {
-    static final Logger logger = ApplicationLogger.getLogger(AdministratorValidator.class);
+
+    static final Logger logger = Logger.getLogger(AdministratorValidator.class);
+
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     public AdministratorValidator(Administrator administrator) {

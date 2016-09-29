@@ -8,7 +8,6 @@ import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.model.Administrator;
 import ua.kiev.allexb.carrental.model.helpers.PasswordHelper;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -27,7 +26,9 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/admin_list/edit"})
 public class EditAdministratorServlet extends HttpServlet {
-    static final Logger logger = ApplicationLogger.getLogger(EditClientServlet.class);
+
+    static final Logger logger = Logger.getLogger(EditClientServlet.class);
+
     private static final long serialVersionUID = 1502749479688638069L;
 
     public EditAdministratorServlet() {

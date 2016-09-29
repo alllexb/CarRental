@@ -7,7 +7,6 @@ import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.data.domain.OrderDomain;
 import ua.kiev.allexb.carrental.data.service.DataBaseUtil;
 import ua.kiev.allexb.carrental.model.Car;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 import java.sql.*;
 import java.util.*;
@@ -19,7 +18,7 @@ import java.util.*;
 
 public class OrderDAOImpl implements OrderDAO {
 
-    static final Logger logger = ApplicationLogger.getLogger(OrderDAO.class);
+    static final Logger logger = Logger.getLogger(OrderDAO.class);
 
     private Connection connection;
 

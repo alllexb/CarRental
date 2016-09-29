@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.util.DateUtil;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.data.service.DataBaseUtil;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.List;
  */
 public class ClientDAOImpl implements ClientDAO {
 
-    static final Logger logger = ApplicationLogger.getLogger(ClientDAO.class);
+    static final Logger logger = Logger.getLogger(ClientDAO.class);
 
     private Connection connection;
     private Statement statement;

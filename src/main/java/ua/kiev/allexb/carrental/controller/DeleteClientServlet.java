@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.ClientDAO;
 import ua.kiev.allexb.carrental.data.dao.ClientDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -23,7 +22,7 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/client_list/delete"})
 public class DeleteClientServlet extends HttpServlet {
-    static final Logger logger = ApplicationLogger.getLogger(DeleteClientServlet.class);
+    static final Logger logger = Logger.getLogger(DeleteClientServlet.class);
     private static final long serialVersionUID = 5671024213850205487L;
 
     public DeleteClientServlet() {

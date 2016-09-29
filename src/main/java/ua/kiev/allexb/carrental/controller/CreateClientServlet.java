@@ -7,7 +7,6 @@ import ua.kiev.allexb.carrental.data.dao.ClientDAO;
 import ua.kiev.allexb.carrental.data.dao.ClientDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.model.Client;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -26,7 +25,7 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/client_list/create"})
 public class CreateClientServlet extends HttpServlet {
-    static final Logger logger = ApplicationLogger.getLogger(CreateClientServlet.class);
+    static final Logger logger = Logger.getLogger(CreateClientServlet.class);
 
     private static final long serialVersionUID = 770031007379483882L;
 

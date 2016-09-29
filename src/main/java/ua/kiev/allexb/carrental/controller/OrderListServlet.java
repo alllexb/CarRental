@@ -5,7 +5,6 @@ import ua.kiev.allexb.carrental.data.dao.OrderDAO;
 import ua.kiev.allexb.carrental.data.dao.OrderDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.OrderDomain;
 import ua.kiev.allexb.carrental.model.Order;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -27,9 +26,9 @@ import java.util.stream.Collectors;
 @WebServlet(urlPatterns = {"/order_list"})
 public class OrderListServlet extends HttpServlet{
 
-    private static final long serialVersionUID = 8902364095440578059L;
+    static final Logger logger = Logger.getLogger(OrderListServlet.class);
 
-    static final Logger logger = ApplicationLogger.getLogger(OrderListServlet.class);
+    private static final long serialVersionUID = 8902364095440578059L;
 
     public OrderListServlet() {
         super();

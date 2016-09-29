@@ -1,7 +1,6 @@
 package ua.kiev.allexb.carrental.controller.filter;
 
 import org.apache.log4j.Logger;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -14,7 +13,7 @@ import java.io.IOException;
 @WebFilter(filterName = "encodingFilter", urlPatterns = { "/*" })
 public class EncodingFilter implements Filter {
 
-    static final Logger logger = ApplicationLogger.getLogger(EncodingFilter.class);
+    static final Logger logger = Logger.getLogger(EncodingFilter.class);
 
     public EncodingFilter() {
     }

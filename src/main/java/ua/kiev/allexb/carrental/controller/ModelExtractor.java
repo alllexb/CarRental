@@ -5,7 +5,6 @@ import ua.kiev.allexb.carrental.model.Administrator;
 import ua.kiev.allexb.carrental.model.Car;
 import ua.kiev.allexb.carrental.model.Client;
 import ua.kiev.allexb.carrental.model.helpers.PasswordHelper;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -19,7 +18,8 @@ import java.util.Date;
  * @version 1.0 19.09.2016
  */
 public class ModelExtractor {
-    static final Logger logger = ApplicationLogger.getLogger(ModelExtractor.class);
+
+    static final Logger logger = Logger.getLogger(ModelExtractor.class);
 
     private HttpServletRequest request;
     private StringBuffer errorMessage;

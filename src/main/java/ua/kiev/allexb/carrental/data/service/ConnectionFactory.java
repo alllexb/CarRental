@@ -1,14 +1,12 @@
 package ua.kiev.allexb.carrental.data.service;
 
 import java.io.*;
-import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.Logger;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.RootPathUtil;
 
 /**
@@ -17,7 +15,7 @@ import ua.kiev.allexb.carrental.utils.RootPathUtil;
  */
 public class ConnectionFactory {
 
-    static final Logger logger = ApplicationLogger.getLogger(ConnectionFactory.class);
+    static final Logger logger = Logger.getLogger(ConnectionFactory.class);
 
     // database properties file path
     private static final String PATH_TO_PROPERTIES = RootPathUtil.getRootApplicationClassPath("db.properties");

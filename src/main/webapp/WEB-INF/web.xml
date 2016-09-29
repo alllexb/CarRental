@@ -8,12 +8,23 @@
 
     <display-name>CarRentalService</display-name>
 
+    <context-param>
+        <param-name>log4j-config-location</param-name>
+        <param-value>/WEB-INF/classes/log4j.properties</param-value>
+    </context-param>
+
     <jsp-config>
         <taglib>
             <taglib-uri>http://allexb.kiev.ua/jsp/tlds/viewtags</taglib-uri>
             <taglib-location>/WEB-INF/tlds/viewtags.tld</taglib-location>
         </taglib>
     </jsp-config>
+
+
+    <filter-mapping>
+        <filter-name>logSessionIdFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <filter-mapping>
         <filter-name>jdbcFilter</filter-name>

@@ -2,7 +2,6 @@ package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.model.Administrator;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -20,8 +19,10 @@ import java.io.IOException;
  */
 @WebServlet(urlPatterns = { "/adminInfo" })
 public class AdministratorInfoServlet extends HttpServlet {
+
+    static final Logger logger = Logger.getLogger(AdministratorInfoServlet.class);
+
     private static final long serialVersionUID = -2331263390335838695L;
-    static final Logger logger = ApplicationLogger.getLogger(AdministratorInfoServlet.class);
 
     public AdministratorInfoServlet() {
         super();

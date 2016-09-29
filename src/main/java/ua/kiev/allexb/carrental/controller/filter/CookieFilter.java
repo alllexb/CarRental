@@ -5,7 +5,6 @@ import ua.kiev.allexb.carrental.data.dao.AdministratorDAO;
 import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.model.Administrator;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.*;
@@ -23,7 +22,7 @@ import java.sql.SQLException;
 @WebFilter(filterName = "cookieFilter", urlPatterns = {"/*"})
 public class CookieFilter implements Filter {
 
-    static final Logger logger = ApplicationLogger.getLogger(CookieFilter.class);
+    static final Logger logger = Logger.getLogger(CookieFilter.class);
 
     public CookieFilter() {
     }

@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.AdministratorDAO;
 import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -24,7 +23,7 @@ import java.sql.SQLException;
 @WebServlet(urlPatterns = {"/admin_list/display"})
 public class DisplayAdministratorServlet extends HttpServlet {
 
-    final static Logger logger = ApplicationLogger.getLogger(DeleteAdministratorServlet.class);
+    final static Logger logger = Logger.getLogger(DeleteAdministratorServlet.class);
 
     private static final long serialVersionUID = -7420994575316483092L;
 

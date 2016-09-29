@@ -6,7 +6,6 @@ import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.model.Administrator;
 import ua.kiev.allexb.carrental.model.helpers.PasswordHelper;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -26,9 +25,10 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/doLogin"})
 public class DoLoginServlet extends HttpServlet {
-    private static final long serialVersionUID = -8084478976908814257L;
 
-    static final Logger logger = ApplicationLogger.getLogger(DoLoginServlet.class);
+    static final Logger logger = Logger.getLogger(DoLoginServlet.class);
+
+    private static final long serialVersionUID = -8084478976908814257L;
 
     public DoLoginServlet() {
         super();

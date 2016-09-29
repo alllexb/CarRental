@@ -1,7 +1,6 @@
 package ua.kiev.allexb.carrental.controller.handler;
 
 import org.apache.log4j.Logger;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,9 +17,10 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/errorHandler"})
 public class ErrorHandler extends HttpServlet {
-    private static final long serialVersionUID = 4004338792160393545L;
 
-    static final Logger logger = ApplicationLogger.getLogger(ErrorHandler.class);
+    static final Logger logger = Logger.getLogger(ErrorHandler.class);
+
+    private static final long serialVersionUID = 4004338792160393545L;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

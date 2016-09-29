@@ -2,7 +2,6 @@ package ua.kiev.allexb.carrental.controller.validator;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.model.Car;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -12,7 +11,8 @@ import java.util.Calendar;
  * @version 1.0 01.09.2016
  */
 public class CarValidator extends Validator<Car> {
-    static final Logger logger = ApplicationLogger.getLogger(CarValidator.class);
+
+    static final Logger logger = Logger.getLogger(CarValidator.class);
 
     public CarValidator(Car car) {
         super(car);

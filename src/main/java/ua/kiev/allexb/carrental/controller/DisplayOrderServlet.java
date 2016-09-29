@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.OrderDAO;
 import ua.kiev.allexb.carrental.data.dao.OrderDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.OrderDomain;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -24,7 +23,7 @@ import java.sql.SQLException;
 @WebServlet(urlPatterns = {"/order_list/display"})
 public class DisplayOrderServlet extends HttpServlet {
 
-    static final Logger logger = ApplicationLogger.getLogger(DisplayOrderServlet.class);
+    static final Logger logger = Logger.getLogger(DisplayOrderServlet.class);
 
     private static final long serialVersionUID = -6301755974067855695L;
 

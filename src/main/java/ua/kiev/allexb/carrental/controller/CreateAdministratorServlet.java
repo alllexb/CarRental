@@ -7,7 +7,6 @@ import ua.kiev.allexb.carrental.data.dao.AdministratorDAO;
 import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.model.Administrator;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -27,7 +26,7 @@ import java.sql.SQLException;
 @WebServlet(urlPatterns = {"/admin_list/create"})
 public class CreateAdministratorServlet extends HttpServlet {
     private static final long serialVersionUID = -7531444911729831583L;
-    static final Logger logger = ApplicationLogger.getLogger(CreateAdministratorServlet.class);
+    static final Logger logger = Logger.getLogger(CreateAdministratorServlet.class);
 
     public CreateAdministratorServlet() {
         super();

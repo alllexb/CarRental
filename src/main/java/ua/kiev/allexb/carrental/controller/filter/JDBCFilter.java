@@ -2,7 +2,6 @@ package ua.kiev.allexb.carrental.controller.filter;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.service.DataBaseUtil;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.*;
@@ -21,7 +20,7 @@ import java.util.Map;
 @WebFilter(filterName = "jdbcFilter", urlPatterns = {"/*"})
 public class JDBCFilter implements Filter {
 
-    static final Logger logger = ApplicationLogger.getLogger(JDBCFilter.class);
+    static final Logger logger = Logger.getLogger(JDBCFilter.class);
 
     public JDBCFilter() {
     }

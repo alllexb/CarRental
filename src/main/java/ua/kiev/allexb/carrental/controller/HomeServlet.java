@@ -1,7 +1,6 @@
 package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,9 +16,10 @@ import java.io.IOException;
  */
 @WebServlet(urlPatterns = {"/home", "", "/index.html", "/index.htm", "/index.jsp"})
 public class HomeServlet extends HttpServlet {
-    private static final long serialVersionUID = 2688609755631823746L;
 
-    static final Logger logger = ApplicationLogger.getLogger(HomeServlet.class);
+    static final Logger logger = Logger.getLogger(HomeServlet.class);
+
+    private static final long serialVersionUID = 2688609755631823746L;
 
     public HomeServlet() {
         super();

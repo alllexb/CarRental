@@ -2,7 +2,6 @@ package ua.kiev.allexb.carrental.controller.filter;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.model.Administrator;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.*;
@@ -17,7 +16,7 @@ import java.io.IOException;
 @WebFilter(filterName = "accessFilter")
 public class AccessFilter implements Filter {
 
-    static final Logger logger = ApplicationLogger.getLogger(AccessFilter.class);
+    static final Logger logger = Logger.getLogger(AccessFilter.class);
 
     public AccessFilter() {
     }

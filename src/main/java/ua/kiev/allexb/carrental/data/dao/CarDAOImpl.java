@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.domain.CarDomain;
 import ua.kiev.allexb.carrental.data.service.DataBaseUtil;
 import ua.kiev.allexb.carrental.model.Car;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.List;
  */
 public class CarDAOImpl implements CarDAO {
 
-    static final Logger logger = ApplicationLogger.getLogger(CarDAO.class);
+    static final Logger logger = Logger.getLogger(CarDAO.class);
 
     private Connection connection;
 

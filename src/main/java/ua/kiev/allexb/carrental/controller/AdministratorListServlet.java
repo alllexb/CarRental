@@ -5,7 +5,6 @@ import ua.kiev.allexb.carrental.data.dao.AdministratorDAO;
 import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.model.Administrator;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -27,7 +26,7 @@ import java.util.stream.Collectors;
 @WebServlet(urlPatterns = {"/admin_list"})
 public class AdministratorListServlet extends HttpServlet {
     private static final long serialVersionUID = -928176549145443440L;
-    static final Logger logger = ApplicationLogger.getLogger(AdministratorListServlet.class);
+    static final Logger logger = Logger.getLogger(AdministratorListServlet.class);
 
     public AdministratorListServlet() {
         super();

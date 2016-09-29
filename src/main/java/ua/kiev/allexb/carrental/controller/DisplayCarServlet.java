@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.CarDAO;
 import ua.kiev.allexb.carrental.data.dao.CarDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.CarDomain;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -23,7 +22,9 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/car_list/display"})
 public class DisplayCarServlet extends HttpServlet {
-    static final Logger logger = ApplicationLogger.getLogger(DisplayCarServlet.class);
+
+    static final Logger logger = Logger.getLogger(DisplayCarServlet.class);
+
     private static final long serialVersionUID = -4721004270696506053L;
 
     public DisplayCarServlet() {

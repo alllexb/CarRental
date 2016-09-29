@@ -16,7 +16,7 @@ import java.sql.Connection;
  */
 public class StoreAndCookieUtil {
 
-    static final Logger logger = ApplicationLogger.getLogger(StoreAndCookieUtil.class);
+    static final Logger logger = Logger.getLogger(StoreAndCookieUtil.class);
 
     private static final int CONNECTION_LIVING_TIME = 30*60;
     private static final String ATTRIBUTE_NAME_ADMIN_NAME = "ATTRIBUTE_FOR_STORE_ADMIN_NAME_IN_COOKIE";

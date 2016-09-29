@@ -4,9 +4,7 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.AdministratorDAO;
 import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
-import ua.kiev.allexb.carrental.model.Administrator;
 import ua.kiev.allexb.carrental.model.helpers.PasswordHelper;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -25,7 +23,7 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/admin_list/delete"})
 public class DeleteAdministratorServlet extends HttpServlet {
-    static final Logger logger = ApplicationLogger.getLogger(DeleteAdministratorServlet.class);
+    static final Logger logger = Logger.getLogger(DeleteAdministratorServlet.class);
     private static final long serialVersionUID = -8074439330386731495L;
 
     public DeleteAdministratorServlet() {

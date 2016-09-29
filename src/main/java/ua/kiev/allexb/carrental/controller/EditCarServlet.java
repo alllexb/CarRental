@@ -7,7 +7,6 @@ import ua.kiev.allexb.carrental.data.dao.CarDAO;
 import ua.kiev.allexb.carrental.data.dao.CarDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.CarDomain;
 import ua.kiev.allexb.carrental.model.Car;
-import ua.kiev.allexb.carrental.utils.ApplicationLogger;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -26,7 +25,8 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/car_list/edit"})
 public class EditCarServlet extends HttpServlet {
-    static final Logger logger = ApplicationLogger.getLogger(EditCarServlet.class);
+
+    static final Logger logger = Logger.getLogger(EditCarServlet.class);
 
     private static final long serialVersionUID = -6669657844128409978L;
 
