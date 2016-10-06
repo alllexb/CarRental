@@ -2,7 +2,7 @@ package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.ClientDAO;
-import ua.kiev.allexb.carrental.data.dao.ClientDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.model.Client;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
@@ -25,8 +25,10 @@ import java.util.stream.Collectors;
  */
 @WebServlet(urlPatterns = {"/client_list"})
 public class ClientListServlet extends HttpServlet {
-    private static final long serialVersionUID = -5098121881329935823L;
+
     static final Logger logger = Logger.getLogger(ClientListServlet.class);
+
+    private static final long serialVersionUID = -5098121881329935823L;
 
     public ClientListServlet() {
         super();
@@ -38,7 +40,9 @@ public class ClientListServlet extends HttpServlet {
         List<Client> clientList = null;
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            ClientDAO clientDAO = new ClientDAOImpl(connection);
+//            ClientDAO clientDAO = new ClientDAOImpl(connection);
+            DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+            ClientDAO clientDAO = daoFactory.getClientDao(connection);
             clientList = clientDAO.getAll().stream().map(ClientDomain::getClient).collect(Collectors.toList());
             logger.info("Client list list extracted.");
         } catch (SQLException ex) {
@@ -48,7 +52,7 @@ public class ClientListServlet extends HttpServlet {
             response.setStatus(500);
         }
         request.setAttribute("clientList", clientList);
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/clientListView.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/clientListView.jsp");
         dispatcher.forward(request, response);
     }
 

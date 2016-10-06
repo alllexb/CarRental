@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.controller.validator.CarValidator;
 import ua.kiev.allexb.carrental.controller.validator.Validator;
 import ua.kiev.allexb.carrental.data.dao.CarDAO;
-import ua.kiev.allexb.carrental.data.dao.CarDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.CarDomain;
 import ua.kiev.allexb.carrental.model.Car;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
@@ -25,6 +25,7 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/car_list/create"})
 public class CreateCarServlet extends HttpServlet {
+
     static final Logger logger = Logger.getLogger(CreateCarServlet.class);
 
     private static final long serialVersionUID = -2881754246718776443L;
@@ -51,7 +52,9 @@ public class CreateCarServlet extends HttpServlet {
             if (validator.isValid()) {
                 Connection connection = StoreAndCookieUtil.getStoredConnection(request);
                 try {
-                    CarDAO carDAO = new CarDAOImpl(connection);
+//                    CarDAO carDAO = new CarDAOImpl(connection);
+                    DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+                    CarDAO carDAO = daoFactory.getCarDAO(connection);
                     CarDomain controlCar = carDAO.getByNumberPlate(car.getNumberPlate());
                     if (controlCar == null) {
                         logger.info("Car data entered correctly.");
@@ -81,7 +84,7 @@ public class CreateCarServlet extends HttpServlet {
             return;
         }
         request.setAttribute("errorString", errorString.toString());
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createCarView.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/createCarView.jsp");
         dispatcher.forward(request, response);
     }
 }

@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.controller.validator.AdministratorValidator;
 import ua.kiev.allexb.carrental.controller.validator.Validator;
 import ua.kiev.allexb.carrental.data.dao.AdministratorDAO;
-import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.model.Administrator;
 import ua.kiev.allexb.carrental.model.helpers.PasswordHelper;
@@ -45,16 +45,18 @@ public class EditAdministratorServlet extends HttpServlet {
         long id = Long.valueOf(request.getParameter("id"));
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+//            AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+            DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+            AdministratorDAO administratorDAO = daoFactory.getAdministratorDao(connection);
             AdministratorDomain administrator = administratorDAO.getById(id);
             if (administrator != null) {
                 logger.info("Administrator data entered correctly.");
                 request.setAttribute("administrator", administrator.getAdministrator());
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/editAdminView.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/editAdminView.jsp");
                 dispatcher.forward(request, response);
             } else {
                 request.setAttribute("errorString", "Administrator with ID: #" + id + " does not exists.");
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/admin_list");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/admin_list");
                 dispatcher.forward(request, response);
             }
         } catch (SQLException ex) {
@@ -81,7 +83,9 @@ public class EditAdministratorServlet extends HttpServlet {
             if (validator.isValid()) {
                 Connection connection = StoreAndCookieUtil.getStoredConnection(request);
                 try {
-                    AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+//                    AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+                    DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+                    AdministratorDAO administratorDAO = daoFactory.getAdministratorDao(connection);
                     AdministratorDomain controlAdministrator = administratorDAO.getById(administrator.getId());
                     if (controlAdministrator != null && controlAdministrator.getLogin().equals(administrator.getLogin()) && controlAdministrator.getPassword().equals(administrator.getPassword())) {
                         boolean isLoginedAdministrator = controlAdministrator.getAdministrator().equals(StoreAndCookieUtil.getLoginedAdministrator(request.getSession()));
@@ -124,7 +128,7 @@ public class EditAdministratorServlet extends HttpServlet {
         }
         request.setAttribute("administrator", administrator);
         request.setAttribute("errorString", errorString.toString());
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/editAdminView.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/editAdminView.jsp");
         dispatcher.forward(request, response);
     }
 }

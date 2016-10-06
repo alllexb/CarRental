@@ -1,8 +1,8 @@
 package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.dao.OrderDAO;
-import ua.kiev.allexb.carrental.data.dao.OrderDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.OrderDomain;
 import ua.kiev.allexb.carrental.model.Order;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
@@ -40,7 +40,9 @@ public class OrderListServlet extends HttpServlet{
         List<Order> orderList = null;
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            OrderDAO orderDAO = new OrderDAOImpl(connection);
+//            OrderDAO orderDAO = new OrderDAOImpl(connection);
+            DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+            OrderDAO orderDAO = daoFactory.getOrderDAO(connection);
             orderList = orderDAO.getAll().stream().map(OrderDomain::getOrder).collect(Collectors.toList());
             logger.info("Order list extracted.");
         } catch (SQLException ex) {
@@ -50,7 +52,7 @@ public class OrderListServlet extends HttpServlet{
             response.setStatus(500);
         }
         request.setAttribute("orderList", orderList);
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/orderListView.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/orderListView.jsp");
         dispatcher.forward(request, response);
     }
 

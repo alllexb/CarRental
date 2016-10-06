@@ -2,7 +2,7 @@ package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.ClientDAO;
-import ua.kiev.allexb.carrental.data.dao.ClientDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
@@ -22,7 +22,9 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/client_list/delete"})
 public class DeleteClientServlet extends HttpServlet {
+
     static final Logger logger = Logger.getLogger(DeleteClientServlet.class);
+
     private static final long serialVersionUID = 5671024213850205487L;
 
     public DeleteClientServlet() {
@@ -39,16 +41,18 @@ public class DeleteClientServlet extends HttpServlet {
         long id = Long.valueOf(request.getParameter("id"));
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            ClientDAO clientDAO = new ClientDAOImpl(connection);
+//            ClientDAO clientDAO = new ClientDAOImpl(connection);
+            DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+            ClientDAO clientDAO = daoFactory.getClientDao(connection);
             ClientDomain client = clientDAO.getById(id);
             if (client != null) {
                 logger.info("Client data entered correctly.");
                 request.setAttribute("client", client.getClient());
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/deleteClientView.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/deleteClientView.jsp");
                 dispatcher.forward(request, response);
             } else {
                 request.setAttribute("errorString", "Client with ID: #" + id + " does not exists.");
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/client_list");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/client_list");
                 dispatcher.forward(request, response);
             }
         } catch (SQLException ex) {
@@ -57,7 +61,6 @@ public class DeleteClientServlet extends HttpServlet {
             request.setAttribute("javax.servlet.error.status_code", 500);
             response.setStatus(500);
         }
-
     }
 
     @Override
@@ -70,7 +73,9 @@ public class DeleteClientServlet extends HttpServlet {
         long id = Long.valueOf(request.getParameter("id"));
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            ClientDAO clientDAO = new ClientDAOImpl(connection);
+//            ClientDAO clientDAO = new ClientDAOImpl(connection);
+            DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+            ClientDAO clientDAO = daoFactory.getClientDao(connection);
             ClientDomain controlClient = clientDAO.getById(id);
             if (controlClient != null) {
                 clientDAO.remove(controlClient);
@@ -78,7 +83,7 @@ public class DeleteClientServlet extends HttpServlet {
             } else {
                 String errorString = "Client with with ID: #" + id + " doesn't exist.";
                 request.setAttribute("errorString", errorString);
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/client_list");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/client_list");
                 dispatcher.forward(request, response);
             }
         } catch (SQLException ex) {
@@ -89,5 +94,4 @@ public class DeleteClientServlet extends HttpServlet {
         }
         response.sendRedirect(request.getContextPath() + "/client_list");
     }
-
 }

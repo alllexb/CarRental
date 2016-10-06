@@ -1,6 +1,7 @@
 package ua.kiev.allexb.carrental.utils;
 
 import org.apache.log4j.Logger;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.model.Administrator;
 
 import javax.servlet.ServletRequest;
@@ -21,6 +22,18 @@ public class StoreAndCookieUtil {
     private static final int CONNECTION_LIVING_TIME = 30*60;
     private static final String ATTRIBUTE_NAME_ADMIN_NAME = "ATTRIBUTE_FOR_STORE_ADMIN_NAME_IN_COOKIE";
     public static final String ATTRIBUTE_NAME_CONNECTION = "ATTRIBUTE_FOR_CONNECTION";
+    public static final String ATTRIBUTE_NAME_DAO_FACTORY = "ATTRIBUTE_FOR_DAO_FACTORY";
+
+    // Store DAOFactory  in Session.
+    public static void storeDAOFactory(HttpSession session, DAOFactory daoFactory) {
+        session.setAttribute(ATTRIBUTE_NAME_DAO_FACTORY, daoFactory);
+    }
+
+    // Get the DAOFactory stored in Session.
+    public static DAOFactory getStoredDAOFactory(HttpSession session) {
+        DAOFactory daoFactory = (DAOFactory) session.getAttribute(ATTRIBUTE_NAME_DAO_FACTORY);
+        return daoFactory;
+    }
 
     // Store Connection in request attribute.
     // (Information stored only exist during requests)
@@ -51,7 +64,6 @@ public class StoreAndCookieUtil {
     public static void storeAdminCookie(HttpServletResponse response, Administrator administrator) {
         logger.info("Store administrator cookie");
         Cookie cookieAdminLogin = new Cookie(ATTRIBUTE_NAME_ADMIN_NAME, administrator.getLogin());
-        // 1 day (Convert to seconds)
         cookieAdminLogin.setMaxAge(CONNECTION_LIVING_TIME);
         response.addCookie(cookieAdminLogin);
     }

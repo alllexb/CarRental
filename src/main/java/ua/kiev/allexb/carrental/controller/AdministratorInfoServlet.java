@@ -34,7 +34,7 @@ public class AdministratorInfoServlet extends HttpServlet {
         Administrator loginedAdministrator = StoreAndCookieUtil.getLoginedAdministrator(session);
         request.setAttribute("admin", loginedAdministrator);
         logger.info("Redirect to administrator view page.");
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/adminInfoView.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/adminInfoView.jsp");
         dispatcher.forward(request, response);
     }
 

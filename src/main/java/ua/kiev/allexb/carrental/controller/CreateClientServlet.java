@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.controller.validator.ClientValidator;
 import ua.kiev.allexb.carrental.controller.validator.Validator;
 import ua.kiev.allexb.carrental.data.dao.ClientDAO;
-import ua.kiev.allexb.carrental.data.dao.ClientDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.model.Client;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
@@ -25,6 +25,7 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/client_list/create"})
 public class CreateClientServlet extends HttpServlet {
+
     static final Logger logger = Logger.getLogger(CreateClientServlet.class);
 
     private static final long serialVersionUID = 770031007379483882L;
@@ -36,7 +37,7 @@ public class CreateClientServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("Client creating form.");
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createClientView.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/createClientView.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -51,7 +52,9 @@ public class CreateClientServlet extends HttpServlet {
             if (validator.isValid()) {
                 Connection connection = StoreAndCookieUtil.getStoredConnection(request);
                 try {
-                    ClientDAO clientDAO = new ClientDAOImpl(connection);
+//                    ClientDAO clientDAO = new ClientDAOImpl(connection);
+                    DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+                    ClientDAO clientDAO = daoFactory.getClientDao(connection);
                     ClientDomain controlClient = clientDAO.getByDLNumber(client.getdLNumber());
                     if (controlClient == null) {
                         logger.info("Client data entered correctly.");
@@ -81,7 +84,7 @@ public class CreateClientServlet extends HttpServlet {
             return;
         }
         request.setAttribute("errorString", errorString.toString());
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createClientView.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/createClientView.jsp");
         dispatcher.forward(request, response);
     }
 }

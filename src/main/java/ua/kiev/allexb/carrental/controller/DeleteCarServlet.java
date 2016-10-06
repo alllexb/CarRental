@@ -2,7 +2,7 @@ package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.CarDAO;
-import ua.kiev.allexb.carrental.data.dao.CarDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.CarDomain;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
@@ -22,8 +22,10 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/car_list/delete"})
 public class DeleteCarServlet extends HttpServlet {
-    private static final long serialVersionUID = 5583615804009416532L;
+
     static final Logger logger = Logger.getLogger(DeleteCarServlet.class);
+
+    private static final long serialVersionUID = 5583615804009416532L;
 
     public DeleteCarServlet() {
         super();
@@ -39,16 +41,18 @@ public class DeleteCarServlet extends HttpServlet {
         long id = Long.valueOf(request.getParameter("id"));
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            CarDAO carDAO = new CarDAOImpl(connection);
+//            CarDAO carDAO = new CarDAOImpl(connection);
+            DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+            CarDAO carDAO = daoFactory.getCarDAO(connection);
             CarDomain car = carDAO.getById(id);
             if (car != null) {
                 logger.info("Car data entered correctly.");
                 request.setAttribute("car", car.getCar());
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/deleteCarView.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/deleteCarView.jsp");
                 dispatcher.forward(request, response);
             } else {
                 request.setAttribute("errorString", "Car with ID: #" + id + " does not exists.");
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/car_list");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/car_list");
                 dispatcher.forward(request, response);
             }
         } catch (SQLException ex) {
@@ -70,7 +74,9 @@ public class DeleteCarServlet extends HttpServlet {
         long id = Long.valueOf(request.getParameter("id"));
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
             try {
-                CarDAO carDAO = new CarDAOImpl(connection);
+//                CarDAO carDAO = new CarDAOImpl(connection);
+                DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+                CarDAO carDAO = daoFactory.getCarDAO(connection);
                 CarDomain controlCar = carDAO.getById(id);
                 if (controlCar != null) {
                     carDAO.remove(controlCar);
@@ -78,7 +84,7 @@ public class DeleteCarServlet extends HttpServlet {
                 } else {
                     String errorString = "Car with with ID: #" + id + " doesn't exist.";
                     request.setAttribute("errorString", errorString);
-                    RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/car_list");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/car_list");
                     dispatcher.forward(request, response);
                 }
             } catch (SQLException ex) {

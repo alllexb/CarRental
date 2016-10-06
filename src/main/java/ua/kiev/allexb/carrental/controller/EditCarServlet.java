@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.controller.validator.CarValidator;
 import ua.kiev.allexb.carrental.controller.validator.Validator;
 import ua.kiev.allexb.carrental.data.dao.CarDAO;
-import ua.kiev.allexb.carrental.data.dao.CarDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.CarDomain;
 import ua.kiev.allexb.carrental.model.Car;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
@@ -44,16 +44,18 @@ public class EditCarServlet extends HttpServlet {
         long id = Long.valueOf(request.getParameter("id"));
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            CarDAO carDAO = new CarDAOImpl(connection);
+//            CarDAO carDAO = new CarDAOImpl(connection);
+            DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+            CarDAO carDAO = daoFactory.getCarDAO(connection);
             CarDomain car = carDAO.getById(id);
             if (car != null) {
                 logger.info("Car data entered correctly.");
                 request.setAttribute("car", car.getCar());
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/editCarView.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/editCarView.jsp");
                 dispatcher.forward(request, response);
             } else {
                 request.setAttribute("errorString", "Car with ID: #" + id + " does not exists.");
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/car_list");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/car_list");
                 dispatcher.forward(request, response);
             }
         } catch (SQLException ex) {
@@ -80,7 +82,9 @@ public class EditCarServlet extends HttpServlet {
             if (validator.isValid()) {
                 Connection connection = StoreAndCookieUtil.getStoredConnection(request);
                 try {
-                    CarDAO carDAO = new CarDAOImpl(connection);
+//                    CarDAO carDAO = new CarDAOImpl(connection);
+                    DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+                    CarDAO carDAO = daoFactory.getCarDAO(connection);
                     CarDomain controlCar = carDAO.getByNumberPlate(car.getNumberPlate());
                     if (controlCar == null || controlCar.getId() == car.getId()) {
                         logger.info("Car data entered correctly.");
@@ -110,7 +114,7 @@ public class EditCarServlet extends HttpServlet {
             return;
         }
         request.setAttribute("errorString", errorString.toString());
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/editCarView.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/editCarView.jsp");
         dispatcher.forward(request, response);
     }
 }

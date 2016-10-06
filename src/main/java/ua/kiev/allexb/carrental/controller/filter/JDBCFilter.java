@@ -1,6 +1,8 @@
 package ua.kiev.allexb.carrental.controller.filter;
 
 import org.apache.log4j.Logger;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
+import ua.kiev.allexb.carrental.data.dao.MySqlDAOFactory;
 import ua.kiev.allexb.carrental.data.service.DataBaseUtil;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
@@ -62,6 +64,8 @@ public class JDBCFilter implements Filter {
                 connection = DataBaseUtil.getConnection();
                 connection.setAutoCommit(false);
                 StoreAndCookieUtil.storeConnection(request, connection);
+                DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(httpRequest.getSession());
+                if (daoFactory == null) StoreAndCookieUtil.storeDAOFactory(httpRequest.getSession(), DAOFactory.getDAOFactory(DAOFactory.MYSQL));
                 chain.doFilter(request, response);
                 connection.commit();
                 logger.info("Changes in connection provided for " + httpRequest.getServletPath() + " committed.");

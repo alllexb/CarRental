@@ -34,9 +34,9 @@ public class LoginServlet extends HttpServlet {
         RequestDispatcher dispatcher;
         if (loginedAdministrator != null) {
             request.setAttribute("errorString", "You need to logout before changing administrator account.");
-            dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/adminInfoView.jsp");
+            dispatcher = request.getRequestDispatcher("/WEB-INF/views/adminInfoView.jsp");
         } else {
-            dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/loginView.jsp");
+            dispatcher = request.getRequestDispatcher("/WEB-INF/views/loginView.jsp");
         }
         dispatcher.forward(request, response);
     }

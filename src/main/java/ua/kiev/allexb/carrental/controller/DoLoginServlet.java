@@ -2,7 +2,7 @@ package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.AdministratorDAO;
-import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.model.Administrator;
 import ua.kiev.allexb.carrental.model.helpers.PasswordHelper;
@@ -50,9 +50,8 @@ public class DoLoginServlet extends HttpServlet {
 
         if (login == null || password == null
                 || login.length() == 0 || password.length() == 0) {
-            // If user try to call "/doLogin" servlet directly, redirection to "/home"
             String header = request.getHeader("Referer");
-            if (header == null || header.endsWith("/doLogin")) {
+            if (header == null) {
                 response.sendRedirect(request.getContextPath() + "/home");
                 return;
             } else {
@@ -62,7 +61,9 @@ public class DoLoginServlet extends HttpServlet {
         } else {
             Connection connection = StoreAndCookieUtil.getStoredConnection(request);
             try {
-                AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+//                AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+                DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+                AdministratorDAO administratorDAO = daoFactory.getAdministratorDao(connection);
                 AdministratorDomain domain = administratorDAO.getByLoginAndPassword(login, PasswordHelper.getSecurePassword(password));
                 administrator = (domain == null) ? null : domain.getAdministrator();
                 if (administrator == null) {
@@ -83,15 +84,15 @@ public class DoLoginServlet extends HttpServlet {
         // If error, forward to /WEB-INF/views/loginView.jsp
         if (hasError) {
             administrator = new Administrator();
-            administrator.setLogin(login);
-            administrator.setPassword(password);
+            administrator.setLogin(login == null ? "" : login);
+            administrator.setPassword(password == null ? "" : password);
 
             // Store information in request attribute, before forward.
             request.setAttribute("errorString", errorString);
             request.setAttribute("admin", administrator);
 
             // Forward to /WEB-INF/views/loginView.jsp
-            RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/loginView.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/loginView.jsp");
             dispatcher.forward(request, response);
         }
 
@@ -113,6 +114,7 @@ public class DoLoginServlet extends HttpServlet {
             }
 
             // Redirect to last visited page or home.
+            // If user try to call "/doLogin" servlet directly, redirection to "/home"
             logger.info("Administrator logined correctly.");
             String header = request.getHeader("Referer");
             if (header.endsWith("/login") || header.endsWith("/logout") || header.endsWith("/doLogin")) {

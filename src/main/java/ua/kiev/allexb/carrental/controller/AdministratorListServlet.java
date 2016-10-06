@@ -2,7 +2,7 @@ package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.AdministratorDAO;
-import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.model.Administrator;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
@@ -25,8 +25,10 @@ import java.util.stream.Collectors;
  */
 @WebServlet(urlPatterns = {"/admin_list"})
 public class AdministratorListServlet extends HttpServlet {
-    private static final long serialVersionUID = -928176549145443440L;
+
     static final Logger logger = Logger.getLogger(AdministratorListServlet.class);
+
+    private static final long serialVersionUID = -928176549145443440L;
 
     public AdministratorListServlet() {
         super();
@@ -38,7 +40,9 @@ public class AdministratorListServlet extends HttpServlet {
         List<Administrator> administrators = null;
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+//            AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+            DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+            AdministratorDAO administratorDAO = daoFactory.getAdministratorDao(connection);
             administrators = administratorDAO.getAll().stream().map(AdministratorDomain::getAdministrator).collect(Collectors.toList());
             logger.info("Administrator list extracted.");
         } catch (SQLException ex) {
@@ -48,7 +52,7 @@ public class AdministratorListServlet extends HttpServlet {
             response.setStatus(500);
         }
         request.setAttribute("administratorList", administrators);
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/adminListView.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/adminListView.jsp");
         dispatcher.forward(request, response);
     }
 

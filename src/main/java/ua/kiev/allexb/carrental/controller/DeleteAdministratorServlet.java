@@ -2,7 +2,7 @@ package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.AdministratorDAO;
-import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.model.helpers.PasswordHelper;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
@@ -23,7 +23,9 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/admin_list/delete"})
 public class DeleteAdministratorServlet extends HttpServlet {
+
     static final Logger logger = Logger.getLogger(DeleteAdministratorServlet.class);
+
     private static final long serialVersionUID = -8074439330386731495L;
 
     public DeleteAdministratorServlet() {
@@ -40,16 +42,18 @@ public class DeleteAdministratorServlet extends HttpServlet {
         long id = Long.valueOf(request.getParameter("id"));
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+//            AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+            DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+            AdministratorDAO administratorDAO = daoFactory.getAdministratorDao(connection);
             AdministratorDomain administrator = administratorDAO.getById(id);
             if (administrator != null) {
                 logger.info("Administrator data entered correctly.");
                 request.setAttribute("administrator", administrator.getAdministrator());
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/deleteAdminView.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/deleteAdminView.jsp");
                 dispatcher.forward(request, response);
             } else {
                 request.setAttribute("errorString", "Administrator with ID: #" + id + " does not exists.");
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/admin_list");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/admin_list");
                 dispatcher.forward(request, response);
             }
         } catch (SQLException ex) {
@@ -71,7 +75,9 @@ public class DeleteAdministratorServlet extends HttpServlet {
         long id = Long.valueOf(request.getParameter("id"));
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+//            AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+            DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+            AdministratorDAO administratorDAO = daoFactory.getAdministratorDao(connection);
             AdministratorDomain controlAdministrator = administratorDAO.getById(id);
             String errorString = "";
             boolean hasError = false;
@@ -96,7 +102,7 @@ public class DeleteAdministratorServlet extends HttpServlet {
             }
             if (hasError) {
                 request.setAttribute("errorString", errorString);
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/admin_list");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/admin_list");
                 dispatcher.forward(request, response);
             }
         } catch (SQLException ex) {

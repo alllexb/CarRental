@@ -2,7 +2,7 @@ package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.AdministratorDAO;
-import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
@@ -40,16 +40,18 @@ public class DisplayAdministratorServlet extends HttpServlet {
         long id = Long.valueOf(request.getParameter("id"));
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+//            AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+            DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+            AdministratorDAO administratorDAO = daoFactory.getAdministratorDao(connection);
             AdministratorDomain administrator = administratorDAO.getById(id);
             if (administrator != null) {
                 logger.info("Administrator data entered correctly.");
                 request.setAttribute("administrator", administrator.getAdministrator());
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/displayAdminView.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/displayAdminView.jsp");
                 dispatcher.forward(request, response);
             } else {
                 request.setAttribute("errorString", "Administrator with ID: #" + id + " does not exists.");
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/admin_list");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/admin_list");
                 dispatcher.forward(request, response);
             }
         } catch (SQLException ex) {

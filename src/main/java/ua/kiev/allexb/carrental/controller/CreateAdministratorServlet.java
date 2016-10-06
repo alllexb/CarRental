@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.controller.validator.AdministratorValidator;
 import ua.kiev.allexb.carrental.controller.validator.Validator;
 import ua.kiev.allexb.carrental.data.dao.AdministratorDAO;
-import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.model.Administrator;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
@@ -25,8 +25,10 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/admin_list/create"})
 public class CreateAdministratorServlet extends HttpServlet {
-    private static final long serialVersionUID = -7531444911729831583L;
+
     static final Logger logger = Logger.getLogger(CreateAdministratorServlet.class);
+
+    private static final long serialVersionUID = -7531444911729831583L;
 
     public CreateAdministratorServlet() {
         super();
@@ -35,7 +37,7 @@ public class CreateAdministratorServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("Administrator creating form.");
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createAdminView.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/createAdminView.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -50,7 +52,9 @@ public class CreateAdministratorServlet extends HttpServlet {
             if (validator.isValid()) {
                 Connection connection = StoreAndCookieUtil.getStoredConnection(request);
                 try {
-                    AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+//                    AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+                    DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+                    AdministratorDAO administratorDAO = daoFactory.getAdministratorDao(connection);
                     AdministratorDomain controlAdministrator = administratorDAO.getByLogin(administrator.getLogin());
                     if (controlAdministrator == null) {
                         logger.info("Administrator data entered correctly.");
@@ -80,7 +84,7 @@ public class CreateAdministratorServlet extends HttpServlet {
             return;
         }
         request.setAttribute("errorString", errorString.toString());
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/createAdminView.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/createAdminView.jsp");
         dispatcher.forward(request, response);
     }
 }

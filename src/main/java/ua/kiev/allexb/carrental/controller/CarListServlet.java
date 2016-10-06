@@ -2,7 +2,7 @@ package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.CarDAO;
-import ua.kiev.allexb.carrental.data.dao.CarDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.CarDomain;
 import ua.kiev.allexb.carrental.model.Car;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
@@ -25,8 +25,10 @@ import java.util.stream.Collectors;
  */
 @WebServlet(urlPatterns = {"/car_list"})
 public class CarListServlet extends HttpServlet {
-    private static final long serialVersionUID = -5098121881329935823L;
+
     static final Logger logger = Logger.getLogger(CarListServlet.class);
+
+    private static final long serialVersionUID = -5098121881329935823L;
 
     public CarListServlet() {
         super();
@@ -38,7 +40,9 @@ public class CarListServlet extends HttpServlet {
         List<Car> cars = null;
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            CarDAO carDAO = new CarDAOImpl(connection);
+//            CarDAO carDAO = new CarDAOImpl(connection);
+            DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+            CarDAO carDAO = daoFactory.getCarDAO(connection);
             cars = carDAO.getAll().stream().map(CarDomain::getCar).collect(Collectors.toList());
             logger.info("Car list extracted.");
         } catch (SQLException ex) {
@@ -48,7 +52,7 @@ public class CarListServlet extends HttpServlet {
             response.setStatus(500);
         }
         request.setAttribute("carList", cars);
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/carListView.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/carListView.jsp");
         dispatcher.forward(request, response);
     }
 

@@ -2,7 +2,7 @@ package ua.kiev.allexb.carrental.controller.filter;
 
 import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.data.dao.AdministratorDAO;
-import ua.kiev.allexb.carrental.data.dao.AdministratorDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.AdministratorDomain;
 import ua.kiev.allexb.carrental.model.Administrator;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
@@ -60,7 +60,9 @@ public class CookieFilter implements Filter {
         if (checked == null && connection != null) {
             String adminLogin = StoreAndCookieUtil.getAdminLoginInCookie(httpRequest);
             try {
-                AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+//                AdministratorDAO administratorDAO = new AdministratorDAOImpl(connection);
+                DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(httpRequest.getSession());
+                AdministratorDAO administratorDAO = daoFactory.getAdministratorDao(connection);
                 AdministratorDomain domain = administratorDAO.getByLogin(adminLogin);
                 Administrator administrator = (domain == null) ? null : domain.getAdministrator();
                 if (administrator == null) {

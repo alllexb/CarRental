@@ -13,6 +13,11 @@
         <param-value>/WEB-INF/classes/log4j.properties</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>DAO-Factory-class</param-name>
+        <param-value>ua.kiev.allexb.carrental.data.dao.MySqlDAOFactory</param-value>
+    </context-param>
+
     <jsp-config>
         <taglib>
             <taglib-uri>http://allexb.kiev.ua/jsp/tlds/viewtags</taglib-uri>

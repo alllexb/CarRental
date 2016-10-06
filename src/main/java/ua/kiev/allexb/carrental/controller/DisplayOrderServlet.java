@@ -1,8 +1,8 @@
 package ua.kiev.allexb.carrental.controller;
 
 import org.apache.log4j.Logger;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.dao.OrderDAO;
-import ua.kiev.allexb.carrental.data.dao.OrderDAOImpl;
 import ua.kiev.allexb.carrental.data.domain.OrderDomain;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
 
@@ -41,16 +41,18 @@ public class DisplayOrderServlet extends HttpServlet {
         long id = Long.valueOf(request.getParameter("id"));
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            OrderDAO orderDAO = new OrderDAOImpl(connection);
+//            OrderDAO orderDAO = new OrderDAOImpl(connection);
+            DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+            OrderDAO orderDAO = daoFactory.getOrderDAO(connection);
             OrderDomain order = orderDAO.getById(id);
             if (order != null) {
                 logger.info("Order data entered correctly.");
                 request.setAttribute("order", order.getOrder());
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/displayOrderView.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/displayOrderView.jsp");
                 dispatcher.forward(request, response);
             } else {
                 request.setAttribute("errorString", "Order with ID: #" + id + " does not exists.");
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/order_list");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/order_list");
                 dispatcher.forward(request, response);
             }
         } catch (SQLException ex) {

@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import ua.kiev.allexb.carrental.controller.validator.ClientValidator;
 import ua.kiev.allexb.carrental.controller.validator.Validator;
 import ua.kiev.allexb.carrental.data.dao.ClientDAO;
-import ua.kiev.allexb.carrental.data.dao.ClientDAOImpl;
+import ua.kiev.allexb.carrental.data.dao.DAOFactory;
 import ua.kiev.allexb.carrental.data.domain.ClientDomain;
 import ua.kiev.allexb.carrental.model.Client;
 import ua.kiev.allexb.carrental.utils.StoreAndCookieUtil;
@@ -44,16 +44,18 @@ public class EditClientServlet extends HttpServlet{
         long id = Long.valueOf(request.getParameter("id"));
         Connection connection = StoreAndCookieUtil.getStoredConnection(request);
         try {
-            ClientDAO clientDAO = new ClientDAOImpl(connection);
+//            ClientDAO clientDAO = new ClientDAOImpl(connection);
+            DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+            ClientDAO clientDAO = daoFactory.getClientDao(connection);
             ClientDomain client = clientDAO.getById(id);
             if (client != null) {
                 logger.info("Client data entered correctly.");
                 request.setAttribute("client", client.getClient());
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/editClientView.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/editClientView.jsp");
                 dispatcher.forward(request, response);
             } else {
                 request.setAttribute("errorString", "Client with ID: #" + id + " does not exists.");
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/client_list");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/client_list");
                 dispatcher.forward(request, response);
             }
         } catch (SQLException ex) {
@@ -80,7 +82,9 @@ public class EditClientServlet extends HttpServlet{
             if (validator.isValid()) {
                 Connection connection = StoreAndCookieUtil.getStoredConnection(request);
                 try {
-                    ClientDAO clientDAO = new ClientDAOImpl(connection);
+//                    ClientDAO clientDAO = new ClientDAOImpl(connection);
+                    DAOFactory daoFactory = StoreAndCookieUtil.getStoredDAOFactory(request.getSession());
+                    ClientDAO clientDAO = daoFactory.getClientDao(connection);
                     ClientDomain controlClient = clientDAO.getByDLNumber(client.getdLNumber());
                     if (controlClient == null || controlClient.getId() == client.getId()) {
                         logger.info("Client data entered correctly.");
@@ -110,7 +114,7 @@ public class EditClientServlet extends HttpServlet{
             return;
         }
         request.setAttribute("errorString", errorString.toString());
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/editClientView.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/editClientView.jsp");
         dispatcher.forward(request, response);
     }
 }

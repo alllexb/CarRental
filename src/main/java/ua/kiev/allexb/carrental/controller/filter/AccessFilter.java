@@ -41,7 +41,7 @@ public class AccessFilter implements Filter {
                 errorString = "Access denied! Login previously.";
             }
             request.setAttribute("errorString", errorString);
-            RequestDispatcher dispatcher = httpRequest.getServletContext().getRequestDispatcher("/WEB-INF/views/loginView.jsp");
+            RequestDispatcher dispatcher = httpRequest.getRequestDispatcher("/WEB-INF/views/loginView.jsp");
             dispatcher.forward(request, response);
         } else {
             logger.info("Permit has been obtained.");
